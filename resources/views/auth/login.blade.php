@@ -80,6 +80,12 @@
                             Create free account
                         </a>
                     </p>
+                    <p class="text-center mt-4 text-muted">
+                        
+                        <a href="{{ route('index') }}" style="" class="text-dark fw-bold text-decoration-none">
+                            Back to home
+                        </a>
+                    </p>
                 </form>
             </div>
         </div>

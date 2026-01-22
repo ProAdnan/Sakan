@@ -22,8 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'phone',
-        'gender',
+        
     ];
 
     /**
@@ -48,4 +47,28 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+
+// Inside User class
+public function apartments() {
+    return $this->hasMany(Apartment::class, 'owner_id');
+}
+
+public function requests() {
+    return $this->hasMany(Request::class, 'student_id');
+}
+
+public function sentMessages() {
+    return $this->hasMany(Message::class, 'sender_id');
+}
+
+public function receivedMessages() {
+    return $this->hasMany(Message::class, 'receiver_id');
+}
+
+
+
+
+    
 }

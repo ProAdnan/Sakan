@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.master')
 
 
 
@@ -31,26 +31,7 @@
 
 @section('content')
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Sakan</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="universities.html">Universities</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="apartments.html">Apartments</a></li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <a href="login.html" class="btn-nav-login">Login</a>
-                    <a href="signup.html" class="btn btn-nav-signup">Sign Up</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    
 
     <div class="container mt-5 pt-5 pb-5">
         <div class="row pt-4">

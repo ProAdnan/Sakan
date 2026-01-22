@@ -2,11 +2,11 @@
 <html lang="en">
 
 
-@include('layout.head')
+@include('layouts.head')
 
 <body>
 
-    @include('layout.admin_sidebar')
+    @include('layouts.admin_sidebar')
 
 
 

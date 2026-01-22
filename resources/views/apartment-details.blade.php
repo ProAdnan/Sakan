@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.master')
 
 
 @section('title', 'Apartment Details - Sakan')
@@ -9,7 +9,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -32,26 +32,7 @@
 @section('content')
 
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">Sakan</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="universities.html">Universities</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="apartments.html">Apartments</a></li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <a href="login.html" class="btn-nav-login">Login</a>
-                    <a href="signup.html" class="btn btn-nav-signup">Sign Up</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+
 
     <div class="container mt-5 pt-5 pb-5">
         <!-- Breadcrumb -->
@@ -97,6 +78,24 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+
+
+
+
+        {{-- display the images --}}
+        {{-- <img src="{{ asset('storage/' . $apartment->images->where('is_main', true)->first()->image_path) }}"
+            class="img-fluid">
+
+        <div class="d-flex gap-2">
+            @foreach ($apartment->images as $image)
+                <img src="{{ asset('storage/' . $image->image_path) }}" width="100">
+            @endforeach
+        </div> --}}
+
+
+
+
+
 
         <div class="row">
             <div class="col-lg-8">
@@ -152,6 +151,11 @@
                     <h4 class="h5 fw-bold mb-3">Location</h4>
                     <div id="map" style="height: 400px; z-index: 1;" class="rounded border"></div>
                 </div>
+
+
+                <!--display the map-->
+                {{-- <div id="displayMap" style="height: 400px;"></div> --}}
+
             </div>
 
             <!-- Sidebar (Contact) -->
@@ -219,5 +223,24 @@
                 .openPopup();
         });
     </script>
+
+
+
+    {{-- view the map
+    <script>
+        // Get the coordinates from your Laravel variable
+        var lat = {{ $apartment->latitude }};
+        var lng = {{ $apartment->longitude }};
+
+        var map = L.map('displayMap').setView([lat, lng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Place a fixed marker where the owner pinned it
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup("{{ $apartment->name }}")
+            .openPopup();
+    </script> --}}
+
 
 @endsection

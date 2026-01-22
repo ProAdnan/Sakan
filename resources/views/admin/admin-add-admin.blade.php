@@ -1,4 +1,4 @@
-@extends('layout.admin_master')
+@extends('layouts.admin_master')
 
 
 
@@ -81,14 +81,20 @@
 @endsection
 
 
-<script>
-    const el = document.getElementById("Add");
-    el.classList.add("active");
-</script>
 
 
 @section('js')
+
+
+
+    <script>
+        const el = document.getElementById("Admins");
+        el.classList.add("active");
+    </script>
+
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 @endsection

@@ -1,4 +1,4 @@
-@extends('layout.admin_master')
+@extends('layouts.admin_master')
 
 @section('title', 'Admin Dashboard - Sakan')
 
@@ -51,11 +51,11 @@
             <div class="stats-card h-100">
                 <div class="stats-icon blue"><i class="bi bi-people-fill"></i></div>
                 <div class="stats-info flex-grow-1">
-                    <h3>2.5k</h3>
+                    <h3>{{ $totalUsers }}</h3>
                     <p class="mb-1">Total Users</p>
                     <div class="d-flex justify-content-between small text-muted border-top pt-1 mt-1">
-                        <span>2,000 Students</span>
-                        <span>500 Owners</span>
+                        <span>{{ $totalStudents }} Students</span>
+                        <span>{{ $totalOwners }} Owners</span>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="stats-icon text-white" style="background-color: #8B5CF6;"><i class="bi bi-mortarboard-fill"></i>
                 </div>
                 <div class="stats-info">
-                    <h3>45</h3>
+                    <h3>{{ $totalUniversities }}</h3>
                     <p>Universities</p>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             <div class="stats-card h-100">
                 <div class="stats-icon orange"><i class="bi bi-house-door-fill"></i></div>
                 <div class="stats-info">
-                    <h3>850</h3>
+                    <h3>{{ $totalApartments }}</h3>
                     <p>Apartments</p>
                 </div>
             </div>
@@ -83,7 +83,7 @@
             <div class="stats-card h-100">
                 <div class="stats-icon green"><i class="bi bi-currency-dollar"></i></div>
                 <div class="stats-info">
-                    <h3>$50k</h3>
+                    <h3>{{ $totalRevenue }}</h3>
                     <p>Total Revenue</p>
                 </div>
             </div>
@@ -106,26 +106,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Alice Wonder</td>
-                        <td><span class="badge bg-info bg-opacity-10 text-info">Student</span></td>
-                        <td>2 mins ago</td>
-                    </tr>
-                    <tr>
-                        <td>Bob Builder</td>
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning">Owner</span></td>
-                        <td>1 hour ago</td>
-                    </tr>
-                    <tr>
-                        <td>Charlie Brown</td>
-                        <td><span class="badge bg-info bg-opacity-10 text-info">Student</span></td>
-                        <td>3 hours ago</td>
-                    </tr>
-                    <tr>
-                        <td>Daisy Miller</td>
-                        <td><span class="badge bg-info bg-opacity-10 text-info">Student</span></td>
-                        <td>5 hours ago</td>
-                    </tr>
+
+                    @foreach ($users as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+
+                            @switch($user->role)
+                                @case('admin')
+                                    <td><span class="badge bg-danger bg-opacity-10 text-danger">{{ $user->role }}</span></td>
+                                @break
+
+                                @case('owner')
+                                    <td><span class="badge bg-warning bg-opacity-10 text-warning">{{ $user->role }}</span></td>
+                                @break
+
+                                @case('student')
+                                    <td><span class="badge bg-info bg-opacity-10 text-info">{{ $user->role }}</span></td>
+                                @break
+                            @endswitch
+
+
+
+
+
+
+                            <td>{{ $user->created_at->diffForHumans() }}</td>
+                        </tr>
+                    @endforeach
+
+
                 </tbody>
             </table>
         </div>
@@ -144,42 +153,60 @@
                         <th>Property</th>
                         <th>Owner</th>
                         <th>Price</th>
+                        <th>Created</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="https://images.unsplash.com/photo-1595846519845-68e298c2edd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=60"
-                                    class="rounded" width="40" height="40" style="object-fit: cover;">
-                                <span class="fw-bold small">Luxury Condo</span>
-                            </div>
-                        </td>
-                        <td>Bob Builder</td>
-                        <td>$2200 / full apartment</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="https://images.unsplash.com/photo-1460317442991-0ec2aa5a1199?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=60"
-                                    class="rounded" width="40" height="40" style="object-fit: cover;">
-                                <span class="fw-bold small">City Apt</span>
-                            </div>
-                        </td>
-                        <td>Sarah J.</td>
-                        <td>$1500 / full apartment</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="https://images.unsplash.com/photo-1484154218962-a1c00207099b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=60"
-                                    class="rounded" width="40" height="40" style="object-fit: cover;">
-                                <span class="fw-bold small">Cozy Room</span>
-                            </div>
-                        </td>
-                        <td>Mike R.</td>
-                        <td>$600 / per room</td>
-                    </tr>
+
+                    @foreach ($apartments as $apart)
+                        @php
+                            // Find the image marked as 'is_main'
+                            $mainImage = $apart->images->where('is_main', true)->first();
+                            // Fallback to the first image if no 'is_main' is found
+                            $displayImage = $mainImage ?? $apart->images->first();
+                        @endphp
+
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
+                                        class="rounded" width="40" height="40" style="object-fit: cover;">
+                                    <span class="fw-bold small">{{ $apart->name }}</span>
+                                </div>
+                            </td>
+
+                           
+
+                            <td>{{ $apart->owner->name}}</td>
+
+
+                            @if ($apart->rent_type == 'whole')
+                                <td>${{ $apart->price }} / full apartment</td>
+                            @else($apart->rent_type == 'rooms')
+                                <td>{{ $apart->price }}/room</td>
+                            @endif
+
+
+
+
+                            <td>{{ $apart->created_at->diffForHumans() }}</td>
+                        </tr>
+
+
+
+
+                        
+                    @endforeach
+
+
+
+
+
+
+
+
+
                 </tbody>
             </table>
         </div>

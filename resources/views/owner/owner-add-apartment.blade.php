@@ -1,4 +1,4 @@
-@extends('layout.owner_master')
+@extends('layouts.owner_master')
 
 
 @section('title', 'Add New Apartment - Owner Dashboard')
@@ -42,10 +42,27 @@
         </div>
     </div>
 
+
+
+
+
+
+    @error('name')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+    @error('latitude')
+        <p class="text-danger">The Location Is Required</p>
+    @enderror
+    
+    @error('images.*')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
     <!-- Add Apartment Form -->
     <div class="dashboard-card">
         <div class="card-body p-4">
-            <form action="owner-apartments.html">
+            <form action="{{ route('owner_apartments.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="row g-4">
                     <!-- Basic Info Section -->
                     <div class="col-12">
@@ -55,7 +72,7 @@
                     <div class="col-md-12">
                         <label for="apartmentName" class="form-label">Apartment Name</label>
                         <input type="text" class="form-control" id="apartmentName"
-                            placeholder="e.g. Sunny Studio in Downtown" required>
+                            placeholder="e.g. Sunny Studio in Downtown" name="name" required>
                     </div>
 
                     <div class="col-md-12">
@@ -70,7 +87,9 @@
                             </div>
                             <div id="imagePreviewContainer" class="d-none d-flex flex-wrap gap-2 justify-content-center">
                             </div>
-                            <input type="file" id="apartmentImages" multiple accept="image/*" class="d-none">
+
+                            <input type="file" name="images[]" id="apartmentImages" multiple accept="image/*"
+                                class="d-none" required>
                         </div>
                         <div id="fileCount" class="form-text text-success mt-2"></div>
                     </div>
@@ -80,14 +99,15 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
                             <input type="text" class="form-control" id="apartmentLocation"
-                                placeholder="City, District, Street" required>
+                                placeholder="City, District, Street" name="location" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="apartmentArea" class="form-label">Area (sqm)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="apartmentArea" placeholder="e.g. 120" required>
+                            <input type="number" name="area" class="form-control" id="apartmentArea"
+                                placeholder="e.g. 120" required>
                             <span class="input-group-text">m²</span>
                         </div>
                     </div>
@@ -96,25 +116,25 @@
                         <label class="form-label">Pin Location on Map</label>
                         <div id="map" style="height: 300px;" class="rounded border"></div>
                         <div class="form-text text-muted">Click on the map to set the exact location.</div>
-                        <input type="hidden" id="apartmentLat" name="latitude">
-                        <input type="hidden" id="apartmentLng" name="longitude">
+                        <input type="hidden" id="apartmentLat" name="latitude" required>
+                        <input type="hidden" id="apartmentLng" name="longitude" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="nearestUniversity" class="form-label">Nearest University</label>
-                        <select class="form-select" id="nearestUniversity">
+                        <select class="form-select" id="nearestUniversity" name="university_id" required>
                             <option selected disabled>Select University</option>
-                            <option value="ksu">King Saud University</option>
-                            <option value="pnu">Princess Nourah University</option>
-                            <option value="psu">Prince Sultan University</option>
-                            <option value="yamamah">Al Yamamah University</option>
-                            <option value="iau">Imam Abdulrahman Bin Faisal University</option>
+
+                            @foreach ($universities as $uni)
+                                <option value="{{ $uni->id }}">{{ $uni->name }}</option>
+                            @endforeach
+
                         </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="apartmentGender" class="form-label">Allowed Gender</label>
-                        <select class="form-select" id="apartmentGender" required>
+                        <select class="form-select" id="apartmentGender" name="gender" required>
                             <option selected disabled>Select Gender</option>
                             <option value="male">Males</option>
                             <option value="female">Females</option>
@@ -123,7 +143,7 @@
 
                     <div class="col-12">
                         <label for="apartmentDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="apartmentDescription" rows="4"
+                        <textarea class="form-control" id="apartmentDescription" rows="4" name="description"
                             placeholder="Describe the apartment, nearby amenities, etc." required></textarea>
                     </div>
 
@@ -149,7 +169,8 @@
                         <label for="wholePrice" class="form-label">Price for Whole Apartment</label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="wholePrice" placeholder="0.00">
+                            <input type="number" name="price" class="form-control" id="wholePrice"
+                                placeholder="0.00" >
                             <span class="input-group-text">/mo</span>
                         </div>
                     </div>
@@ -158,13 +179,15 @@
                     <div class="col-md-12 row g-3 d-none" id="roomsContainer">
                         <div class="col-md-6">
                             <label for="numberOfRooms" class="form-label">Number of Rooms</label>
-                            <input type="number" class="form-control" id="numberOfRooms" placeholder="e.g. 3">
+                            <input type="number" class="form-control" name="number_of_rooms" id="numberOfRooms"
+                                placeholder="e.g. 3">
                         </div>
                         <div class="col-md-6">
                             <label for="roomPrice" class="form-label">Price per Room</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="roomPrice" placeholder="0.00">
+                                <input type="number" class="form-control" name="price" id="roomPrice"
+                                    placeholder="0.00">
                                 <span class="input-group-text">/mo</span>
                             </div>
                         </div>
@@ -182,16 +205,16 @@
                                 placeholder="Enter a feature (e.g. Free WiFi, Gym, Parking)">
                             <button class="btn btn-outline-primary" type="button" id="addFeatureBtn">Add</button>
                         </div>
+
                         <div id="featuresContainer" class="d-flex flex-wrap gap-2 mb-2">
-                            <!-- Features will be added here dynamically -->
                             <span class="badge bg-light text-dark border p-2 d-flex align-items-center gap-2">
-                                Free WiFi
-                                <i class="bi bi-x text-danger" style="cursor: pointer;"
-                                    onclick="this.parentElement.remove()"></i>
+                                Kitchen
+                                <i class="bi bi-x text-danger" style="cursor: pointer;"></i>
                             </span>
                         </div>
+
                         <div class="form-text text-muted">Type a feature and press Enter or click Add.</div>
-                        <!-- Hidden input to store all features for form submission -->
+
                         <input type="hidden" name="features" id="featuresList" value='["Free WiFi"]'>
                     </div>
 
@@ -225,22 +248,37 @@
             const roomsContainer = document.getElementById('roomsContainer');
 
             function toggleRentType() {
+                const wholePrice = document.getElementById('wholePrice');
+                const roomPrice = document.getElementById('roomPrice');
+                const numRooms = document.getElementById('numberOfRooms');
+
                 if (rentWholeRadio.checked) {
                     wholePriceContainer.classList.remove('d-none');
                     roomsContainer.classList.add('d-none');
-                    // Add required to whole price, remove from room fields
-                    document.getElementById('wholePrice').setAttribute('required', '');
-                    document.getElementById('numberOfRooms').removeAttribute('required');
-                    document.getElementById('roomPrice').removeAttribute('required');
+
+                    // Enable Whole Price
+                    wholePrice.disabled = false;
+                    wholePrice.setAttribute('required', '');
+
+                    // Disable Room fields (They won't be sent to Laravel)
+                    roomPrice.disabled = true;
+                    numRooms.disabled = true;
+                    roomPrice.removeAttribute('required');
+                    numRooms.removeAttribute('required');
                 } else {
                     wholePriceContainer.classList.add('d-none');
                     roomsContainer.classList.remove('d-none');
-                    roomsContainer.classList.add(
-                        'd-flex'); // Since it's a row, ensure it displays correctly when shown
-                    // Add required to room fields, remove from whole price
-                    document.getElementById('wholePrice').removeAttribute('required');
-                    document.getElementById('numberOfRooms').setAttribute('required', '');
-                    document.getElementById('roomPrice').setAttribute('required', '');
+                    roomsContainer.classList.add('d-flex');
+
+                    // Disable Whole Price
+                    wholePrice.disabled = true;
+                    wholePrice.removeAttribute('required');
+
+                    // Enable Room fields
+                    roomPrice.disabled = false;
+                    numRooms.disabled = false;
+                    roomPrice.setAttribute('required', '');
+                    numRooms.setAttribute('required');
                 }
             }
 
@@ -293,18 +331,23 @@
             const featuresListInput = document.getElementById('featuresList');
 
             function updateFeaturesList() {
-                const features = Array.from(featuresContainer.children).map(badge => badge.textContent.trim());
+                // We map only the text node, excluding the icon's text
+                const features = Array.from(featuresContainer.children).map(badge => {
+                    return badge.childNodes[0].textContent.trim();
+                });
                 featuresListInput.value = JSON.stringify(features);
             }
 
             function addFeature() {
                 const value = featureInput.value.trim();
-                if (value) {
+                // Prevent empty or duplicate features
+                const currentFeatures = JSON.parse(featuresListInput.value);
+
+                if (value && !currentFeatures.includes(value)) {
                     const badge = document.createElement('span');
                     badge.className = 'badge bg-light text-dark border p-2 d-flex align-items-center gap-2';
                     badge.innerHTML = `${value} <i class="bi bi-x text-danger" style="cursor: pointer;"></i>`;
 
-                    // Add remove functionality
                     badge.querySelector('i').addEventListener('click', function() {
                         badge.remove();
                         updateFeaturesList();
@@ -339,23 +382,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Map
-            // Default center: Riyadh (24.7136, 46.6753)
-            var map = L.map('map').setView([24.7136, 46.6753], 13);
+            // Default center: amman
+            var map = L.map('map').setView([31.9454, 35.9284], 13);
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
             var marker;
             var latInput = document.getElementById('apartmentLat');
             var lngInput = document.getElementById('apartmentLng');
 
             function onMapClick(e) {
+                // If a marker already exists, move it. Otherwise, create it.
                 if (marker) {
-                    map.removeLayer(marker);
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
                 }
-                marker = L.marker(e.latlng).addTo(map);
+
+                // Update the hidden inputs that Laravel will read
                 latInput.value = e.latlng.lat;
                 lngInput.value = e.latlng.lng;
 

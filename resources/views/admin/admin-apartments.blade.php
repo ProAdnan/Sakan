@@ -1,4 +1,4 @@
-@extends('layout.admin_master')
+@extends('layouts.admin_master')
 
 
 
@@ -37,6 +37,10 @@
             <p class="text-muted">Review and manage apartment listings.</p>
         </div>
     </div>
+
+    @if (session('success'))
+        <p style="color: green">{{ session('success') }}</p>
+    @endif
 
     <!-- Filters -->
     <div class="dashboard-card mb-4 p-3">

@@ -1,4 +1,4 @@
-@extends('layout.owner_master')
+@extends('layouts.owner_master')
 
 
 @section('title', 'Owner Dashboard - Sakan')
