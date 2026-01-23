@@ -109,7 +109,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                         <tr>
                             <td>{{ $user->name }}</td>
 
@@ -128,76 +128,89 @@
                             @endswitch
 
 
-
-
-
-
                             <td>{{ $user->created_at->diffForHumans() }}</td>
                         </tr>
-                    @endforeach
+
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    No Users yet.
+                                </td>
+                            </tr>
+                        @endforelse
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- Recent Listings -->
-    <div class="dashboard-card">
-        <div class="card-header">
-            <h5>New Apartment Listings</h5>
+        <!-- Recent Listings -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h5>New Apartment Listings</h5>
 
-            <a class="text-dark" href="{{ route('apartments.index') }}"><button class="btn btn-sm btn-light">View
-                    All</button></a>
+                <a class="text-dark" href="{{ route('apartments.index') }}"><button class="btn btn-sm btn-light">View
+                        All</button></a>
 
-        </div>
-        <div class="table-responsive">
-            <table class="table mb-0">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Owner</th>
-                        <th>Price</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach ($apartments as $apart)
-                        @php
-                            // Find the image marked as 'is_main'
-                            $mainImage = $apart->images->where('is_main', true)->first();
-                            // Fallback to the first image if no 'is_main' is found
-                            $displayImage = $mainImage ?? $apart->images->first();
-                        @endphp
-
-
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
                         <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
-                                        class="rounded" width="40" height="40" style="object-fit: cover;">
-                                    <span class="fw-bold small">{{ $apart->name }}</span>
-                                </div>
-                            </td>
-
-
-
-                            <td>{{ $apart->owner->name }}</td>
-
-
-                            @if ($apart->rent_type == 'whole')
-                                <td>${{ $apart->price }} / full apartment</td>
-                            @else($apart->rent_type == 'rooms')
-                                <td>{{ $apart->price }}/room</td>
-                            @endif
-
-
-
-
-                            <td>{{ $apart->created_at->diffForHumans() }}</td>
+                            <th>Property</th>
+                            <th>Owner</th>
+                            <th>Price</th>
+                            <th>Created</th>
                         </tr>
-                    @endforeach
+                    </thead>
+                    <tbody>
+
+                        @forelse ($apartments as $apart)
+                            @php
+                                // Find the image marked as 'is_main'
+                                $mainImage = $apart->images->where('is_main', true)->first();
+                                // Fallback to the first image if no 'is_main' is found
+                                $displayImage = $mainImage ?? $apart->images->first();
+                            @endphp
+
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
+                                            class="rounded" width="40" height="40" style="object-fit: cover;">
+                                        <span class="fw-bold small">{{ $apart->name }}</span>
+                                    </div>
+                                </td>
+
+
+
+                                <td>{{ $apart->owner->name }}</td>
+
+
+                                @if ($apart->rent_type == 'whole')
+                                    <td>${{ $apart->price }} / full apartment</td>
+                                @else($apart->rent_type == 'rooms')
+                                    <td>{{ $apart->price }}/room</td>
+                                @endif
+
+
+
+
+                                <td>{{ $apart->created_at->diffForHumans() }}</td>
+                            </tr>
+
+
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    No Apartments yet.
+                                </td>
+                            </tr>
+
+
+                        @endforelse
 
 
 
@@ -207,23 +220,23 @@
 
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-@endsection
-
+    @endsection
 
 
-@section('js')
 
-    <script>
-        const el = document.getElementById("Overview");
-        el.classList.add("active");
-    </script>
+    @section('js')
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            const el = document.getElementById("Overview");
+            el.classList.add("active");
+        </script>
 
-@endsection
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @endsection

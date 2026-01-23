@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Apartment;
+use App\Models\University;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class ApartmentAdminController extends Controller
 {
@@ -11,7 +15,16 @@ class ApartmentAdminController extends Controller
      */
     public function index()
     {
-        return view('admin.admin-apartments');
+
+        $apartments = Apartment::with(['images', 'owner', 'university'])
+            ->latest()
+            ->get();
+
+
+        $universities = University::all();
+
+
+        return view('admin.admin-apartments', compact('apartments'));
     }
 
     /**
@@ -57,8 +70,19 @@ class ApartmentAdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Apartment $apartments)
     {
-        //
+
+
+        foreach ($apartments->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+        }
+
+        $apartments->delete();
+
+        return redirect()->route('apartments.index')->with('success', 'Apartment Deleted Successfully!');
+
+
+
     }
 }
