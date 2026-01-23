@@ -133,7 +133,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('apartmentspage') }}">Apartments</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/#contact') }}">Contact Us</a></li>
                         <li class="nav-item"><a class="nav-link fw-semibold text-danger"
-                                href="admin-dashboard.html">Dashboard</a></li>
+                                href="{{ route('admin.index')}}">Dashboard</a></li>
                     </ul>
                     <div class="d-flex align-items-center gap-3">
                         <div class="dropdown">
@@ -146,8 +146,8 @@
                                 <span class="text-dark fw-medium">{{ Auth::user()->name }} </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="adminDropdown">
-                                <li><a class="dropdown-item" href="admin-dashboard.html">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="admin-profile.html">Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.index')}}">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin_profile.index')}}">Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

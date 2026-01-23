@@ -46,41 +46,64 @@
         </div>
     </div>
 
+
+    @error('name')
+        <p class="text-danger"> {{ $message }}</p>
+    @enderror
+    @error('email')
+        <p class="text-danger"> {{ $message }}</p>
+    @enderror
+    @error('phone')
+        <p class="text-danger"> {{ $message }}</p>
+    @enderror
+    @error('password')
+        <p class="text-danger"> {{ $message }}</p>
+    @enderror
+
+
+    
+
+
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="dashboard-card p-5 h-100">
-                <form action="admin-profile.html">
-                    <div class="text-center mb-5">
-                        <div class="position-relative d-inline-block">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                class="rounded-circle mb-3 border border-3 border-light shadow-sm" alt="Admin Avatar"
-                                width="140" height="140" style="object-fit: cover;">
-                            <button type="button"
-                                class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle"
-                                style="width: 32px; height: 32px; padding: 0;">
-                                <i class="bi bi-camera"></i>
-                            </button>
-                        </div>
-                    </div>
+                <form action="{{ route('admin_profile.update', $admin_profile->id) }}" method="POST">
+                    @csrf
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Full Name</label>
-                        <input type="text" class="form-control form-control-lg" value="Admin User">
+                        <input type="text" name="name" class="form-control form-control-lg"
+                            value="{{ $admin_profile->name }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" class="form-control form-control-lg" value="admin@sakan.app">
+                        <input type="email" name="email" class="form-control form-control-lg"
+                            value="{{ $admin_profile->email }}" required>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-bold">Phone Number</label>
-                        <input type="tel" class="form-control form-control-lg" value="+1 (555) 123-4567">
+                        <input type="tel" name="phone" class="form-control form-control-lg"
+                            value="{{ $admin_profile->phone }}" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg"
+                            >
+                            <span>New Password (leave blank to keep current)</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Confirm Password</label>
+                        <input type="password" name="password_confirmation" class="form-control form-control-lg"
+                            >
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                        <a href="admin-profile.html" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                       @method('PUT') <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <a href="{{ route('admin_profile.index') }}" class="btn btn-outline-secondary btn-lg">Cancel</a>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+
+
+use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
+
+
 
 class AdminsController extends Controller
 {
@@ -11,7 +23,10 @@ class AdminsController extends Controller
      */
     public function index()
     {
-        return view('admin.admin-admins');
+
+        $admins = User::where('role', 'admin')->latest()->get();
+
+        return view('admin.admin-admins', compact('admins'));
     }
 
     /**
@@ -19,7 +34,7 @@ class AdminsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.admin-add-admin');
     }
 
     /**
@@ -27,7 +42,33 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+
+            'phone' => ['required', 'min:10'],
+            'password' => ['required', Rules\Password::defaults()],
+
+
+        ]);
+
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => $request->password,
+            'role' => 'admin',
+
+        ]);
+
+
+        return redirect()->route('admins.index')->with('success', 'Admin Created Successfully!');
+
+
+
     }
 
     /**
@@ -57,8 +98,15 @@ class AdminsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $admin)
     {
-        //
+
+
+        $admin->delete();
+
+
+
+        return redirect()->route('admins.index')->with('success', 'Admin Deleted Successfully!');
+
     }
 }

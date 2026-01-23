@@ -48,7 +48,7 @@ Route::resource('apartments', ApartmentAdminController::class)->middleware(['aut
 
 Route::resource('admins', AdminsController::class)->middleware(['auth', 'AdminAuth']);
 
-Route::resource('profile', AdminProfileController::class)->middleware(['auth', 'AdminAuth']);
+Route::resource('admin_profile', AdminProfileController::class)->middleware(['auth', 'AdminAuth']);
 
 
 

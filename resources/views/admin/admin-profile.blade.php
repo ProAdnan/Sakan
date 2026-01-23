@@ -39,20 +39,25 @@
         </div>
     </div>
 
+
+    @if (session('success'))
+        <p style="color: green">{{ session('success') }}</p>
+    @endif
+
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <!-- Admin Profile Card -->
             <div class="dashboard-card p-5 h-100">
                 <div class="text-center mb-5">
                     <div class="position-relative d-inline-block">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+                        <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"
                             class="rounded-circle mb-3 border border-3 border-light shadow-sm" alt="Admin Avatar"
                             width="140" height="140" style="object-fit: cover;">
                         <span class="position-absolute bottom-0 end-0 p-2 bg-success border border-light rounded-circle">
                             <span class="visually-hidden">Online</span>
                         </span>
                     </div>
-                    <h3 class="fw-bold mb-1">Admin User</h3>
+                    <h3 class="fw-bold mb-1">{{ $admin->name }}</h3>
                     <p class="text-muted mb-0">Super Administrator</p>
                 </div>
 
@@ -64,11 +69,21 @@
 
                     <div class="d-flex align-items-center mb-4">
                         <div class="bg-light rounded p-3 me-3 text-primary">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Full Name</small>
+                            <span class="fw-medium fs-5">{{ $admin->name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-light rounded p-3 me-3 text-primary">
                             <i class="bi bi-envelope fs-5"></i>
                         </div>
                         <div>
                             <small class="text-muted d-block">Email Address</small>
-                            <span class="fw-medium fs-5">admin@sakan.app</span>
+                            <span class="fw-medium fs-5">{{ $admin->email }}</span>
                         </div>
                     </div>
 
@@ -78,17 +93,16 @@
                         </div>
                         <div>
                             <small class="text-muted d-block">Phone Number</small>
-                            <span class="fw-medium fs-5">+1 (555) 123-4567</span>
+                            <span class="fw-medium fs-5">{{ $admin->phone }}</span>
                         </div>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <a href="admin-edit-profile.html" class="btn btn-primary btn-lg">
+                        @method('PUT') <a href="{{ route('admin_profile.edit', $admin->id) }}"
+                            class="btn btn-primary btn-lg">
                             <i class="bi bi-pencil me-2"></i>Edit Profile Info
                         </a>
-                        <button class="btn btn-outline-secondary">
-                            Change Password
-                        </button>
+
                     </div>
                 </div>
             </div>

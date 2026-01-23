@@ -35,7 +35,7 @@
             </a>
         </li>
         <li class="sidebar-nav-item">
-            <a href="{{ route('profile.index') }}" id="Profile" class="sidebar-nav-link">
+            <a href="{{ route('admin_profile.index') }}" id="Profile" class="sidebar-nav-link">
                 <i class="bi bi-person-circle"></i> Profile
             </a>
         </li>

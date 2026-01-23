@@ -36,7 +36,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="admin-profile.html" class="text-decoration-none">Profile</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admins.index')}}" class="text-decoration-none">Admins</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add Admin</li>
                 </ol>
             </nav>
@@ -45,33 +45,60 @@
         </div>
     </div>
 
+
+    @error('name')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+    @error('email')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+    @error('phone')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
+    @error('password')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="dashboard-card p-5 h-100">
-                <form action="admin-users.html">
+
+                <form action="{{ route('admins.store') }}" method="POST">
+
+                    @csrf
 
                     <h5 class="fw-bold mb-4">Admin Information</h5>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Full Name</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="e.g. John Doe">
+                        <input type="text" name="name" class="form-control form-control-lg"
+                            placeholder="e.g. John Doe" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" class="form-control form-control-lg" placeholder="e.g. john@sakan.app">
+                        <input type="email" name="email" class="form-control form-control-lg"
+                            placeholder="e.g. john@sakan.app" required>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-bold">Phone Number</label>
-                        <input type="tel" class="form-control form-control-lg" placeholder="e.g. +1 (555) 000-0000">
+                        <input type="tel" name="phone" class="form-control form-control-lg" placeholder="07" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg" placeholder=" "
+                            required>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Add Admin</button>
-                        <a href="admin-profile.html" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                        <button type="submit" name="submit" class="btn btn-primary btn-lg">Add Admin</button>
+                        <a href="{{ route('admins.index') }}" class="btn btn-outline-secondary btn-lg">Cancel</a>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
