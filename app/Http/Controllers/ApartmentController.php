@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApartmentImage;
 use App\Models\University;
 use Illuminate\Http\Request;
 use function PHPUnit\Framework\returnValueMap;
 use App\Models\Apartment;
 use App\Models\Feature;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class ApartmentController extends Controller
@@ -17,9 +20,12 @@ class ApartmentController extends Controller
     public function index()
     {
 
-        $apartments = Apartment::with('images')->latest()->get();
+        $apartments = Apartment::with('images')
+            ->where('owner_id', auth()->id())
+            ->latest()
+            ->get();
 
-        return view('owner.owner-apartments',compact('apartments'));
+        return view('owner.owner-apartments', compact('apartments'));
     }
 
     /**
@@ -121,8 +127,16 @@ class ApartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Apartment $owner_apartment)
     {
-        //
+
+        foreach ($owner_apartment->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+        }
+
+        $owner_apartment->delete();
+
+        return redirect()->route('owner_apartments.index')->with('success', 'Apartment Deleted Successfully!');
+
     }
 }

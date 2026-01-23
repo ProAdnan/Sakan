@@ -44,7 +44,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="admin-universities.html"
+                    <li class="breadcrumb-item"><a href="{{ route('universities.index') }}"
                             class="text-decoration-none">Universities</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit University</li>
                 </ol>
@@ -52,7 +52,7 @@
             <h2 class="fw-bold mb-1">Edit University</h2>
             <p class="text-muted">Update university details.</p>
         </div>
-        <a href="admin-universities.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i>
+        <a href="{{ route('universities.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i>
             Back to List</a>
     </div>
 
@@ -60,13 +60,18 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="dashboard-card p-4 p-md-5">
-                    <form action="#" method="POST">
+                    <form action="{{ route('universities.update', $university->id) }}" method="POST"
+                        enctype="multipart/form-data">
+
+                        @csrf
+
+
                         <div class="row g-4">
                             <!-- Name -->
                             <div class="col-12">
                                 <label for="uniName" class="form-label fw-bold">University Name</label>
-                                <input type="text" class="form-control form-control-lg" id="uniName"
-                                    value="Harvard University" required>
+                                <input type="text" name="name" class="form-control form-control-lg" id="uniName"
+                                    value="{{ $university->name }}" required>
                             </div>
 
                             <!-- Location -->
@@ -74,8 +79,8 @@
                                 <label for="uniLocation" class="form-label fw-bold">Location</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-muted"></i></span>
-                                    <input type="text" class="form-control form-control-lg" id="uniLocation"
-                                        value="Cambridge, MA" required>
+                                    <input type="text" name="location" class="form-control form-control-lg"
+                                        id="uniLocation" value="{{ $university->location }}" required>
                                 </div>
                             </div>
 
@@ -95,17 +100,17 @@
                                         <p class="text-muted small mb-0">SVG, PNG, JPG or GIF (max. 800x400px)
                                         </p>
                                     </div>
-                                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=60"
+                                    <img src="{{ $university->image ? asset('storage/' . $university->image) : asset('images/sample1.jpg') }}"
                                         id="imagePreview" class="img-fluid rounded"
                                         style="max-height: 200px; object-fit: cover;">
-                                    <input type="file" id="fileInput" class="d-none" accept="image/*">
+                                    <input type="file" name="image" id="fileInput" class="d-none" accept="image/*">
                                 </div>
                             </div>
 
                             <!-- Actions -->
                             <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                                <a href="admin-universities.html" class="btn btn-light btn-lg px-4">Cancel</a>
-                                <button type="submit" class="btn btn-primary btn-lg px-4">Save
+                                <a href="{{ route('universities.index') }}" class="btn btn-light btn-lg px-4">Cancel</a>
+                                @method('PUT') <button type="submit" class="btn btn-primary btn-lg px-4">Save
                                     Changes</button>
                             </div>
                         </div>

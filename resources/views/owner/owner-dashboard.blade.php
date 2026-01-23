@@ -79,7 +79,7 @@
     <div class="dashboard-card">
         <div class="card-header">
             <h5>Recent Booking Requests</h5>
-            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            <a href="{{ route('request.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
         </div>
         <div class="table-responsive">
             <table class="table mb-0">

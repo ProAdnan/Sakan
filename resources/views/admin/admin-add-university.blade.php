@@ -45,7 +45,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="admin-universities.html"
+                    <li class="breadcrumb-item"><a href="{{ route('universities.index') }}"
                             class="text-decoration-none">Universities</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add New</li>
                 </ol>
@@ -53,7 +53,7 @@
             <h2 class="fw-bold mb-1">Add New University</h2>
             <p class="text-muted">Create a new university listing.</p>
         </div>
-        <a href="admin-universities.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i>
+        <a href="{{ route('universities.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i>
             Back to List</a>
     </div>
 
@@ -61,24 +61,31 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="dashboard-card p-4 p-md-5">
-                    <form action="#" method="POST">
+                    <form action="{{ route('universities.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="row g-4">
                             <!-- Name -->
                             <div class="col-12">
                                 <label for="uniName" class="form-label fw-bold">University Name</label>
-                                <input type="text" class="form-control form-control-lg" id="uniName"
+                                <input type="text" name="name" class="form-control form-control-lg" id="uniName"
                                     placeholder="e.g. Harvard University" required>
                             </div>
+                            @error('name')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
 
                             <!-- Location -->
                             <div class="col-12">
                                 <label for="uniLocation" class="form-label fw-bold">Location</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white"><i class="bi bi-geo-alt text-muted"></i></span>
-                                    <input type="text" class="form-control form-control-lg" id="uniLocation"
-                                        placeholder="e.g. Cambridge, MA" required>
+                                    <input type="text" name="location" class="form-control form-control-lg"
+                                        id="uniLocation" placeholder="e.g. Cambridge, MA" required>
                                 </div>
                             </div>
+                            @error('location')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
 
                             <!-- Formal Image Upload -->
                             <div class="col-12">
@@ -98,14 +105,17 @@
                                     </div>
                                     <img id="imagePreview" class="img-fluid rounded d-none"
                                         style="max-height: 200px; object-fit: cover;">
-                                    <input type="file" id="fileInput" class="d-none" accept="image/*">
+                                    <input type="file" name="image" id="fileInput" class="d-none" accept="image/*">
                                 </div>
                             </div>
+                            @error('image')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
 
                             <!-- Actions -->
                             <div class="col-12 mt-4 d-flex justify-content-end gap-3">
                                 <a href="admin-universities.html" class="btn btn-light btn-lg px-4">Cancel</a>
-                                <button type="submit" class="btn btn-primary btn-lg px-4">Create
+                                <button type="submit" name="submit" class="btn btn-primary btn-lg px-4">Create
                                     University</button>
                             </div>
                         </div>

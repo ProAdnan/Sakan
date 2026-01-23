@@ -13,13 +13,21 @@ return new class extends Migration {
 
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
+
+            $table->foreignId('owner_id')->constrained('users')->onDelete('restrict');
+
             $table->string('name', 150);
             $table->string('location');
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->integer('area');
-            $table->foreignId('university_id')->nullable()->constrained('universities')->onDelete('set null');
+
+            $table->foreignId('university_id')
+                ->nullable() // This is the missing piece!
+                ->constrained('universities')
+                ->onDelete('restrict');
+
+
             $table->enum('allowed_gender', ['male', 'female']);
             $table->text('description')->nullable();
             $table->enum('rent_type', ['whole', 'rooms']);

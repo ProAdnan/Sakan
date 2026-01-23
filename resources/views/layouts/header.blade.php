@@ -14,10 +14,9 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/#contact') }}">Contact Us</a></li>
                     </ul>
                     <div class="d-flex align-items-center gap-3">
-                        <a href="messages.html" class="text-dark position-relative me-2" title="Messages">
+                        <a href="{{ route('messages_page')}}" class="text-dark position-relative me-2" title="Messages">
                             <i class="bi bi-chat-dots fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                style="font-size: 0.6rem;">2</span>
+                            
                         </a>
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"

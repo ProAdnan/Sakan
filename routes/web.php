@@ -85,6 +85,14 @@ Route::get('apartment', function () {
 })->name('apartmentspage');
 
 
+Route::get('messages_page', function () {
+
+    return view('messages');
+
+})->name('messages_page');
+
+
+
 
 
 require __DIR__ . '/auth.php';

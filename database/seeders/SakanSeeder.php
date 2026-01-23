@@ -24,16 +24,7 @@ class SakanSeeder extends Seeder
     {
 
 
-        // 1. Create Universities
-        $unis = [
-            ['name' => 'Yarmouk University', 'location' => 'Irbid'],
-            ['name' => 'Jordan University of Science and Technology', 'location' => 'Ar-Ramtha'],
-            ['name' => 'University of Jordan', 'location' => 'Amman'],
-        ];
-
-        foreach ($unis as $uni) {
-            University::create($uni);
-        }
+       
 
         // 2. Create Common Features
         $features = ['WiFi', 'Kitchen', 'Air Conditioning', 'Elevator', 'Washing Machine'];
@@ -44,7 +35,7 @@ class SakanSeeder extends Seeder
         // 3. Create an Owner
         $owner = User::create([
             'name' => 'Samer Owner',
-            'email' => 'owner@sakan.com',
+            'email' => 'owner@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'owner',
             'phone' => '0791234567'

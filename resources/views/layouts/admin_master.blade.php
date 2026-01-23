@@ -3,6 +3,8 @@
 
 
 @include('layouts.head')
+@livewireStyles
+
 
 <body>
 
@@ -23,6 +25,8 @@
 
 
     @yield('js')
+        @livewireScripts
+
 
 </body>
 

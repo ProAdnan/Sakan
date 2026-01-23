@@ -94,7 +94,9 @@
     <div class="dashboard-card">
         <div class="card-header">
             <h5>Recent Users</h5>
-            <button class="btn btn-sm btn-light">View All</button>
+            <a class="text-dark" href="{{ route('users.index') }}"><button class="btn btn-sm btn-light">View
+                    All</button></a>
+
         </div>
         <div class="table-responsive">
             <table class="table mb-0">
@@ -144,7 +146,10 @@
     <div class="dashboard-card">
         <div class="card-header">
             <h5>New Apartment Listings</h5>
-            <button class="btn btn-sm btn-light">View All</button>
+
+            <a class="text-dark" href="{{ route('apartments.index') }}"><button class="btn btn-sm btn-light">View
+                    All</button></a>
+
         </div>
         <div class="table-responsive">
             <table class="table mb-0">
@@ -176,9 +181,9 @@
                                 </div>
                             </td>
 
-                           
 
-                            <td>{{ $apart->owner->name}}</td>
+
+                            <td>{{ $apart->owner->name }}</td>
 
 
                             @if ($apart->rent_type == 'whole')
@@ -192,11 +197,6 @@
 
                             <td>{{ $apart->created_at->diffForHumans() }}</td>
                         </tr>
-
-
-
-
-                        
                     @endforeach
 
 

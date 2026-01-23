@@ -18,7 +18,7 @@ class OwnerAuth
     {
 
 
-        if (!Auth::check() && Auth::user()->role !== 'owner') {
+        if (!Auth::check() || Auth::user()->role !== 'owner') {
             return redirect()->route('index')->with('error', 'Access denied.');
         }
 

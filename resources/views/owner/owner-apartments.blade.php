@@ -42,9 +42,16 @@
         <p style="color: green">{{ session('success') }}</p>
     @endif
 
+
+    
+
     <!-- Apartments List -->
     <div class="dashboard-card">
         <div class="table-responsive">
+
+
+
+
             <table class="table mb-0">
                 <thead>
                     <tr>
@@ -59,7 +66,8 @@
                 <tbody>
 
 
-                    @foreach ($apartments as $apart)
+
+                    @forelse ($apartments as $apart)
                         @php
                             // Find the image marked as 'is_main'
                             $mainImage = $apart->images->where('is_main', true)->first();
@@ -68,27 +76,61 @@
                         @endphp
 
                         <tr>
-                            <td><img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
+                            <td>
+                                <img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
                                     alt="Apt" class="rounded" width="60" height="40" style="object-fit: cover;">
                             </td>
                             <td class="fw-bold">{{ $apart->name }}</td>
 
-                            @if ($apart->rent_type == 'whole')
-                                <td> {{ $apart->price }} /mo</td>
-                            @else($apart->rent_type == 'rooms')
-                                <td>{{ $apart->price }}/room</td>
-                            @endif
-
+                            <td>
+                                @if ($apart->rent_type == 'whole')
+                                    {{ $apart->price }} /mo
+                                @else
+                                    {{ $apart->price }} /room
+                                @endif
+                            </td>
 
                             <td>{{ $apart->location }}</td>
                             <td><span class="badge bg-success">{{ $apart->status }}</span></td>
                             <td>
-                                <a href="owner-edit-apartment.html" class="btn btn-sm btn-light text-primary"><i
-                                        class="bi bi-pencil"></i></a>
-                                <button class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                                <a href="{{ route('apartments.edit', $apart->id) }}"
+                                    class="btn btn-sm btn-light text-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+
+
+                                <form action="{{ route('owner_apartments.destroy', $apart->id) }}" method="POST"
+                                    class="d-inline delete-form">
+
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-light text-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </form>
+
+
+
                             </td>
                         </tr>
-                    @endforeach
+
+                    @empty
+
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">
+                                No apartments yet. <a href="{{ route('owner_apartments.create') }}">Click here to add
+                                    one.</a>
+                            </td>
+                        </tr>
+                    @endforelse
+
+
+
+
+
+
 
 
                 </tbody>
@@ -104,6 +146,10 @@
 
 
 @section('js')
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/sweet.js') }}"></script>
+
 
     <script>
         const el = document.getElementById("Apartments");

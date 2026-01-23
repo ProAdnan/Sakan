@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 <aside class="dashboard-sidebar" style="background-color: #111827;">
-    <a href="index.html" class="sidebar-brand">
+    <a href="{{ route('admin.index') }}" class="sidebar-brand">
         <i class="bi bi-shield-lock"></i> Sakan Admin
     </a>
 

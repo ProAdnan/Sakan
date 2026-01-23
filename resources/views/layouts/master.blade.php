@@ -2,6 +2,7 @@
 <html lang="en">
 
 @include('layouts.head')
+@livewireStyles
 
 <body @yield('class')>
 
@@ -25,6 +26,7 @@
 
 
     @yield('js')
+    @livewireScripts
 
 </body>
 
