@@ -50,10 +50,18 @@
     @error('name')
         <p class="text-danger">{{ $message }}</p>
     @enderror
+    @error('gender')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
+    @error('university_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+
     @error('latitude')
         <p class="text-danger">The Location Is Required</p>
     @enderror
-    
+
     @error('images.*')
         <p class="text-danger">{{ $message }}</p>
     @enderror
@@ -170,7 +178,7 @@
                         <div class="input-group">
                             <span class="input-group-text">$</span>
                             <input type="number" name="price" class="form-control" id="wholePrice"
-                                placeholder="0.00" >
+                                placeholder="0.00">
                             <span class="input-group-text">/mo</span>
                         </div>
                     </div>

@@ -30,7 +30,7 @@
 
 
 
-    
+
 
     <!-- Page Header -->
     <header class="page-header mt-5 pt-5">
@@ -40,97 +40,42 @@
         </div>
     </header>
 
+
+
     <!-- Universities Grid -->
     <section class="section pt-0">
         <div class="container">
             <div class="row g-4">
-                <!-- Card 1 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Harvard">
-                        <div class="card-body">
-                            <h5 class="card-title">Harvard University</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> Cambridge, MA
+
+
+                @forelse($universities as $uni)
+                    <!-- Card 1 -->
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card university-card">
+                            <img src="{{ asset('storage/' . $uni->image) }}"
+                                class="card-img-top" alt="Harvard">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $uni->name}}</h5>
+                                <div class="university-location">
+                                    <i class="bi bi-geo-alt"></i> {{ $uni->location }}
+                                </div>
+                                <a href="apartments.html?uni=harvard" class="btn btn-outline-primary w-100">View
+                                    Apartments</a>
                             </div>
-                            <a href="apartments.html?uni=harvard" class="btn btn-outline-primary w-100">View
-                                Apartments</a>
                         </div>
                     </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Stanford">
-                        <div class="card-body">
-                            <h5 class="card-title">Stanford University</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> Stanford, CA
-                            </div>
-                            <a href="apartments.html?uni=stanford" class="btn btn-outline-primary w-100">View
-                                Apartments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1592280771884-f36b04321743?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="MIT">
-                        <div class="card-body">
-                            <h5 class="card-title">MIT</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> Cambridge, MA
-                            </div>
-                            <a href="apartments.html?uni=mit" class="btn btn-outline-primary w-100">View Apartments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 4 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Yale">
-                        <div class="card-body">
-                            <h5 class="card-title">Yale University</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> New Haven, CT
-                            </div>
-                            <a href="apartments.html?uni=yale" class="btn btn-outline-primary w-100">View Apartments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 5 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="UCLA">
-                        <div class="card-body">
-                            <h5 class="card-title">UCLA</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> Los Angeles, CA
-                            </div>
-                            <a href="apartments.html?uni=ucla" class="btn btn-outline-primary w-100">View Apartments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 6 -->
-                <div class="col-md-4 col-sm-6">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Columbia">
-                        <div class="card-body">
-                            <h5 class="card-title">Columbia University</h5>
-                            <div class="university-location">
-                                <i class="bi bi-geo-alt"></i> New York, NY
-                            </div>
-                            <a href="apartments.html?uni=columbia" class="btn btn-outline-primary w-100">View
-                                Apartments</a>
-                        </div>
-                    </div>
-                </div>
+
+                @empty
+
+                    <p>no universities yet</p>
+
+                @endforelse
+
+
+
+
+
+
             </div>
         </div>
     </section>
@@ -147,5 +92,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 @endsection
-
-

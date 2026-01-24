@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 
-@section('title',  'Sakan - Student Housing Platform')
+@section('title', 'Sakan - Student Housing Platform')
 
 
 
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/global.css') }}">
-   
+
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
 
 
@@ -39,10 +39,10 @@
             <p>Find safe, affordable, and convenient apartments near your university in minutes. Connect directly with
                 owners.</p>
             <div class="d-flex justify-content-center gap-3">
-                <a href="apartments.html" class="btn btn-primary btn-lg">
+                <a href="{{ route('apartmentspage') }}" class="btn btn-primary btn-lg">
                     <i class="bi bi-search"></i> Find an Apartment
                 </a>
-                <a href="signup.html" class="btn btn-outline-light btn-lg" style="border: 2px solid white;">
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg" style="border: 2px solid white;">
                     <i class="bi bi-house-add"></i> Post Your Apartment
                 </a>
             </div>
@@ -89,6 +89,8 @@
         </div>
     </section>
 
+
+
     <!-- Universities Section -->
     <section class="section bg-light">
         <div class="container">
@@ -97,45 +99,34 @@
                 <p>Find housing near the most popular campuses.</p>
             </div>
             <div class="row g-4">
-                <!-- University Card 1 -->
-                <div class="col-md-4">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="University">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Harvard University</h5>
-                            <p class="text-muted"><i class="bi bi-geo-alt"></i> Cambridge, MA</p>
-                            <a href="apartments.html?uni=harvard" class="btn btn-secondary w-100">View Apartments</a>
+
+
+                @forelse($universities as $uni)
+                    <div class="col-md-4">
+                        <div class="card university-card">
+                            <img src="{{ asset('storage/' . $uni->image) }}" class="card-img-top" alt="University">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ $uni->name }}</h5>
+                                <p class="text-muted"><i class="bi bi-geo-alt"></i>{{ $uni->location }}</p>
+                                <a href="apartments.html?uni=harvard" class="btn btn-secondary w-100">View Apartments</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- University Card 2 -->
-                <div class="col-md-4">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="University">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Stanford University</h5>
-                            <p class="text-muted"><i class="bi bi-geo-alt"></i> Stanford, CA</p>
-                            <a href="apartments.html?uni=stanford" class="btn btn-secondary w-100">View Apartments</a>
-                        </div>
+
+
+
+                @empty
+
+                    <div class="col-md-4">
+                        <p>no universities yet</p>
                     </div>
-                </div>
-                <!-- University Card 3 -->
-                <div class="col-md-4">
-                    <div class="card university-card">
-                        <img src="https://images.unsplash.com/photo-1592280771884-f36b04321743?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="University">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">MIT</h5>
-                            <p class="text-muted"><i class="bi bi-geo-alt"></i> Cambridge, MA</p>
-                            <a href="apartments.html?uni=mit" class="btn btn-secondary w-100">View Apartments</a>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
+
+
+
             </div>
             <div class="text-center mt-5">
-                <a href="universities.html" class="btn btn-outline-primary">View All Universities</a>
+                <a href="{{ route('universitiesPage') }}" class="btn btn-outline-primary">View All Universities</a>
             </div>
         </div>
     </section>
@@ -148,85 +139,53 @@
                 <p>Check out the latest listings for students.</p>
             </div>
             <div class="row g-4">
-                <!-- Apartment Card 1 -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="card apartment-card">
-                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Apartment">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">Sunny Studio</h5>
-                                <span class="apartment-price">$800<small
-                                        class="text-muted text-sm fw-normal">/mo</small></span>
+
+
+                @forelse($apartments as $apart)
+                    <!-- Apartment Card 1 -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card apartment-card">
+                            <img src="{{ asset('storage/' . $apart->images->first()->image_path) }}" class="card-img-top"
+                                alt="Apartment">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0">{{ $apart->name }}</h5>
+
+                                    @if ($apart->rentType == 'whole')
+                                        <span class="apartment-price">{{ $apart->price }}<small
+                                                class="text-muted text-sm fw-normal">/mo</small></span>
+                                    @elseif($apart->rentType == 'rooms')
+                                        <span class="apartment-price">{{ $apart->price }}<small
+                                                class="text-muted text-sm fw-normal">/room</small></span>
+                                    @endif
+
+
+
+
+                                </div>
+                                <div class="apartment-meta">
+                                    <i class="bi bi-mortarboard"></i> Near {{ $apart->university->name }}
+                                </div>
+                                <p class="text-muted small">{{ Str::limit($apart->description) }}</p>
+                                <a href="{{ route('apartments_d', $apart->id) }}"
+                                    class="btn btn-primary w-100 btn-sm">View Details</a>
                             </div>
-                            <div class="apartment-meta">
-                                <i class="bi bi-mortarboard"></i> Near Harvard University
-                            </div>
-                            <p class="text-muted small">Cozy studio perfect for a single student aiming for focus.</p>
-                            <a href="apartment-details.html" class="btn btn-primary w-100 btn-sm">View Details</a>
                         </div>
                     </div>
-                </div>
-                <!-- Apartment Card 2 -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="card apartment-card">
-                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Apartment">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">Modern Loft</h5>
-                                <span class="apartment-price">$1200<small
-                                        class="text-muted text-sm fw-normal">/mo</small></span>
-                            </div>
-                            <div class="apartment-meta">
-                                <i class="bi bi-mortarboard"></i> Near Stanford
-                            </div>
-                            <p class="text-muted small">Spacious loft with great light and modern amenities.</p>
-                            <a href="apartment-details.html" class="btn btn-primary w-100 btn-sm">View Details</a>
-                        </div>
+
+                @empty
+
+                    <div class="col-md-3">
+
+                        <p>no apartments yet</p>
+
                     </div>
-                </div>
-                <!-- Apartment Card 3 -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="card apartment-card">
-                        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Apartment">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">Cozy Room</h5>
-                                <span class="apartment-price">$650<small
-                                        class="text-muted text-sm fw-normal">/mo</small></span>
-                            </div>
-                            <div class="apartment-meta">
-                                <i class="bi bi-mortarboard"></i> Near MIT
-                            </div>
-                            <p class="text-muted small">Private room in a shared student house. Great community.</p>
-                            <a href="apartment-details.html" class="btn btn-primary w-100 btn-sm">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Apartment Card 4 -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="card apartment-card">
-                        <img src="https://images.unsplash.com/photo-1512918760513-95f192902791?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                            class="card-img-top" alt="Apartment">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">2BHK Flat</h5>
-                                <span class="apartment-price">$1500<small
-                                        class="text-muted text-sm fw-normal">/mo</small></span>
-                            </div>
-                            <div class="apartment-meta">
-                                <i class="bi bi-mortarboard"></i> Near Duke
-                            </div>
-                            <p class="text-muted small">Perfect for sharing with a friend. Fully furnished.</p>
-                            <a href="apartment-details.html" class="btn btn-primary w-100 btn-sm">View Details</a>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
+
+
             </div>
             <div class="text-center mt-5">
-                <a href="apartments.html" class="btn btn-outline-primary">Browse by University</a>
+                <a href="{{ route('apartmentspage') }}" class="btn btn-outline-primary">View All Apartments</a>
             </div>
         </div>
     </section>

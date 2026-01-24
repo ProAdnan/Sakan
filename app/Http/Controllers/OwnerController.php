@@ -11,6 +11,16 @@ class OwnerController extends Controller
      */
     public function index()
     {
+
+        // $apartments = Apartment::with('images')
+        //     ->where('owner_id', auth()->id())
+        //     ->latest()
+        //     ->get();
+
+
+            
+
+
         return view('owner.owner-dashboard');
     }
 

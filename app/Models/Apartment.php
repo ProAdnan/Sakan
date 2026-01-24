@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\University;
 
 class Apartment extends Model
 {
@@ -34,8 +35,10 @@ class Apartment extends Model
 
     public function university()
     {
+        // This tells Laravel: "Look at my university_id and find the matching University"
         return $this->belongsTo(University::class);
     }
+
 
     public function images()
     {

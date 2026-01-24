@@ -49,6 +49,8 @@ class ApartmentController extends Controller
             'longitude' => 'required',
             'images' => 'required|array|min:1|max:5',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'gender' => 'required',
+            'university_id' => 'required',
         ]);
 
 

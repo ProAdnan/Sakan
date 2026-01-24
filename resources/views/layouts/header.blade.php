@@ -82,7 +82,7 @@
                                 href="{{ route('owner.index')}}">Owner Dashboard</a></li>
                     </ul>
                     <div class="d-flex align-items-center gap-3">
-                        <a href="messages.html" class="text-dark position-relative me-2" title="Messages">
+                        <a href="{{ route('messages.index')}}" class="text-dark position-relative me-2" title="Messages">
                             <i class="bi bi-chat-dots fs-5"></i>
                         </a>
                         <div class="dropdown">

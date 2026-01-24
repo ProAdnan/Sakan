@@ -38,61 +38,52 @@
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" class="my-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="apartments.html">Apartments</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Sunny Studio near Harvard</li>
+                <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('apartmentspage') }}">Apartments</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $apartment->name }}</li>
             </ol>
         </nav>
 
         <!-- Gallery -->
         <!-- Gallery Carousel -->
         <div id="apartmentCarousel" class="carousel slide gallery-container mb-4" data-bs-ride="carousel">
+
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#apartmentCarousel" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#apartmentCarousel" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#apartmentCarousel" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+                @foreach ($apartment->images as $index => $image)
+                    <button type="button" data-bs-target="#apartmentCarousel" data-bs-slide-to="{{ $index }}"
+                        class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : 'false' }}"
+                        aria-label="Slide {{ $index + 1 }}">
+                    </button>
+                @endforeach
             </div>
+
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                        class="d-block w-100 carousel-img" alt="Main View">
-                </div>
-                <div class="carousel-item">
-                    <img src="https://images.unsplash.com/photo-1583847661450-8a02f4a21e4c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                        class="d-block w-100 carousel-img" alt="Kitchen">
-                </div>
-                <div class="carousel-item">
-                    <img src="https://images.unsplash.com/photo-1512918760513-95f192902791?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                        class="d-block w-100 carousel-img" alt="Bedroom">
-                </div>
+                @forelse ($apartment->images as $image)
+                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                        <img src="{{ asset('storage/' . $image->image_path) }}" class="d-block w-100 carousel-img"
+                            alt="Apartment Image">
+                    </div>
+                @empty
+                    <div class="carousel-item active">
+                        <img src="{{ asset('storage/sample1.jpg') }}" class="d-block w-100 carousel-img"
+                            alt="No Image Available">
+                    </div>
+                @endforelse
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+
+            @if ($apartment->images->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#apartmentCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#apartmentCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            @endif
         </div>
-
-
-
-
-        {{-- display the images --}}
-        {{-- <img src="{{ asset('storage/' . $apartment->images->where('is_main', true)->first()->image_path) }}"
-            class="img-fluid">
-
-        <div class="d-flex gap-2">
-            @foreach ($apartment->images as $image)
-                <img src="{{ asset('storage/' . $image->image_path) }}" width="100">
-            @endforeach
-        </div> --}}
-
-
 
 
 
@@ -103,18 +94,50 @@
                 <div class="details-header">
                     <div class="d-flex justify-content-between align-items-start flex-wrap">
                         <div>
-                            <h1 class="h2 fw-bold mb-2">Sunny Studio near Harvard</h1>
+                            <h1 class="h2 fw-bold mb-2">{{ $apartment->name }}</h1>
                             <div class="text-muted mb-2">
-                                <i class="bi bi-geo-alt-fill text-primary"></i> 123 Cambridge St, MA &bull;
-                                <i class="bi bi-mortarboard-fill text-primary ms-2"></i> Harvard University &bull;
-                                <i class="bi bi-aspect-ratio text-primary ms-2"></i> 45 m² &bull;
-                                <i class="bi bi-gender-male text-primary ms-2"></i> Males &bull;
-                                <i class="bi bi-house text-primary ms-2"></i> Whole Apartment
+                                <i class="bi bi-geo-alt-fill text-primary"></i> {{ $apartment->location }} &bull;
+                                <i class="bi bi-mortarboard-fill text-primary ms-2"></i>
+                                {{ $apartment->university->name ?? 'none' }}
+                                &bull;
+                                <i class="bi bi-aspect-ratio text-primary ms-2"></i> {{ $apartment->area }} &bull;
+
+                                @if ($apartment->gender == 'male')
+                                    <i class="bi bi-gender-male text-primary ms-2"></i> Males &bull;
+                                @elseif($apartment->gender == 'female')
+                                    <i class="bi bi-gender-female text-primary ms-2"></i> Females &bull;
+                                @endif
+
+
+                                @if ($apartment->rent_type == 'whole')
+                                    <i class="bi bi-house text-primary ms-2"></i> Whole Apartment
+                                @elseif($apartment->rent_type == 'rooms')
+                                    <i class="bi bi-house text-primary ms-2"></i> Rooms
+                                    <br>
+                                    <i class="bi bi-house text-primary ms-2"></i> {{ $apartment->number_of_rooms }}
+                                @endif
+
+
+
+
+
                             </div>
                         </div>
                         <div class="text-end">
-                            <div class="price-tag">$800</div>
-                            <div class="price-period">per month</div>
+
+
+                            @if ($apartment->rent_type == 'whole')
+                                <div class="price-tag">${{ $apartment->price }}</div>
+
+                                <div class="price-period">per month</div>
+                            @elseif($apartment->rent_type == 'rooms')
+                                <div class="price-tag">${{ $apartment->price }}/room</div>
+
+                                <div class="price-period">per month</div>
+                            @endif
+
+
+
                         </div>
                     </div>
                 </div>
@@ -123,11 +146,17 @@
                 <div class="mb-4">
                     <h4 class="h5 fw-bold mb-3">Key Features</h4>
                     <div class="d-flex flex-wrap">
-                        <span class="feature-badge"><i class="bi bi-wifi"></i> Free WiFi</span>
-                        <span class="feature-badge"><i class="bi bi-snow"></i> Air Conditioning</span>
-                        <span class="feature-badge"><i class="bi bi-cup-hot"></i> Kitchen</span>
-                        <span class="feature-badge"><i class="bi bi-shield-lock"></i> Security</span>
-                        <span class="feature-badge"><i class="bi bi-water"></i> Water Included</span>
+
+                        @forelse($apartment->features as $feature)
+                            <span class="feature-badge"><i class="bi bi-{{ $feature->name }}"></i>
+                                {{ $feature->name }}</span>
+                        @empty
+                            <span class="feature-badge"><i class="bi bi-wifi"></i>no features</span>
+                        @endforelse
+
+
+
+
                     </div>
                 </div>
 
@@ -135,14 +164,7 @@
                 <div class="mb-4">
                     <h4 class="h5 fw-bold mb-3">About this place</h4>
                     <p class="text-muted">
-                        Welcome to this bright and cozy studio apartment, perfectly located for students attending
-                        Harvard University.
-                        The space features a large window that lets in plenty of natural light, a comfortable study
-                        area, and a fully equipped kitchenette.
-                        <br><br>
-                        The building is secure and quiet, ideal for focusing on your studies. You'll be walking distance
-                        from the campus, grocery stores, and public transport.
-                        Laundry facilities are available in the basement.
+                        {{ $apartment->description }}
                     </p>
                 </div>
 
@@ -153,8 +175,7 @@
                 </div>
 
 
-                <!--display the map-->
-                {{-- <div id="displayMap" style="height: 400px;"></div> --}}
+
 
             </div>
 
@@ -166,8 +187,8 @@
                         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                             alt="Owner" class="owner-avatar me-3">
                         <div>
-                            <h6 class="mb-0 fw-bold">Alex Johnson</h6>
-                            <small class="text-muted">Verified Owner</small>
+                            <h6 class="mb-0 fw-bold">{{ $apartment->owner->name ?? 'none' }}</h6>
+                            <small class="text-muted">Owner</small>
                         </div>
                     </div>
 
@@ -179,11 +200,11 @@
                     <div class="mt-4 pt-3 border-top">
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-envelope text-muted me-2"></i>
-                            <span class="text-muted">alex@example.com</span>
+                            <span class="text-muted">{{ $apartment->owner->email ?? 'none' }}</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <i class="bi bi-telephone text-muted me-2"></i>
-                            <span class="text-muted">+1 234 567 8900</span>
+                            <span class="text-muted">{{ $apartment->owner->phone ?? 'none' }}</span>
                         </div>
                     </div>
 
@@ -207,7 +228,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Map centered on Cambridge, MA (approx coordinates)
             var map = L.map('map').setView([42.3736, -71.1097], 14);
@@ -218,21 +239,21 @@
             }).addTo(map);
 
             // Add a marker for the apartment
-            var marker = L.marker([42.3736, -71.1097]).addTo(map)
+            var marker = L.marker([{{ $apartment->longitude }}, {{ $apartment->latitude }}]).addTo(map)
                 .bindPopup('<b>Sunny Studio</b><br>123 Cambridge St.')
                 .openPopup();
         });
-    </script>
+    </script> --}}
 
 
 
-    {{-- view the map
+    {{-- view the map --}}
     <script>
         // Get the coordinates from your Laravel variable
         var lat = {{ $apartment->latitude }};
         var lng = {{ $apartment->longitude }};
 
-        var map = L.map('displayMap').setView([lat, lng], 15);
+        var map = L.map('map').setView([lat, lng], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -240,7 +261,7 @@
         L.marker([lat, lng]).addTo(map)
             .bindPopup("{{ $apartment->name }}")
             .openPopup();
-    </script> --}}
+    </script>
 
 
 @endsection

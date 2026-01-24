@@ -34,6 +34,10 @@ return new class extends Migration {
             $table->decimal('price', 10, 2);
             $table->integer('number_of_rooms')->nullable();
             $table->enum('status', ['available', 'rented', 'hidden'])->default('available');
+
+            $table->unsignedBigInteger('views')->default(0);
+
+
             $table->timestamps();
         });
 
@@ -41,6 +45,9 @@ return new class extends Migration {
 
 
     }
+
+    
+
 
     /**
      * Reverse the migrations.

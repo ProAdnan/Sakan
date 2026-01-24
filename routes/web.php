@@ -3,8 +3,11 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\AllApartments;
+use App\Http\Controllers\AllUniversities;
 use App\Http\Controllers\ApartmentAdminController;
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\OwnerProfileController;
@@ -16,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('', function () {
-    return view('index');
-})->name('index');
+Route::get('', [IndexController::class, 'index'])->name('index');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -71,18 +72,12 @@ Route::resource('ownerprofile', OwnerProfileController::class)->middleware(['aut
 
 
 
-Route::get('university', function () {
-
-    return view('universities');
-
-})->name('universitiesPage');
+Route::get('university', [AllUniversities::class, 'index'])->name('universitiesPage');
 
 
-Route::get('apartment', function () {
+Route::get('apartment', [AllApartments::class, 'index'])->name('apartmentspage');
 
-    return view('apartments');
-
-})->name('apartmentspage');
+Route::get('apartment-deatails/{apartment}', [AllApartments::class, 'show'])->name('apartments_d');
 
 
 Route::get('messages_page', function () {

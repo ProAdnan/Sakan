@@ -39,9 +39,7 @@
             <p class="text-muted">Here's what's happening with your properties today.</p>
         </div>
         <button class="d-lg-none btn btn-primary"><i class="bi bi-list"></i> Menu</button>
-        <div class="d-none d-lg-block">
-            <button class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add New Apartment</button>
-        </div>
+            
     </div>
 
     <!-- Stats Grid -->
