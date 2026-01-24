@@ -1,10 +1,12 @@
 @extends('layouts.owner_master')
 
-
 @section('title', 'Edit Apartment - Owner Dashboard')
 
-
 @section('head')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+
+
 
 
     <meta charset="UTF-8">
@@ -24,41 +26,47 @@
 
 @endsection
 
-
-
-
 @section('content')
-
-
-
-    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="owner-apartments.html" class="text-decoration-none">My
+                    <li class="breadcrumb-item"><a href="{{ route('owner_apartments.index') }}"
+                            class="text-decoration-none">My
                             Apartments</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit Apartment</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold mb-0">Edit Apartment</h2>
+            <h2 class="fw-bold mb-0">Edit: {{ $apartment->name }}</h2>
         </div>
     </div>
 
-    <!-- Edit Apartment Form -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="dashboard-card">
         <div class="card-body p-4">
-            <form>
+            <form action="{{ route('owner_apartments.update', $apartment->id) }}" method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
                 <div class="row g-4">
-                    <!-- Basic Info Section -->
                     <div class="col-12">
                         <h5 class="mb-3 border-bottom pb-2">Basic Information</h5>
                     </div>
 
                     <div class="col-md-12">
                         <label for="apartmentName" class="form-label">Apartment Name</label>
-                        <input type="text" class="form-control" id="apartmentName"
-                            placeholder="e.g. Sunny Studio in Downtown" value="Sunny Studio" required>
+                        <input type="text" class="form-control" name="name"
+                            value="{{ old('name', $apartment->name) }}" required>
                     </div>
 
                     <div class="col-md-12">
@@ -66,37 +74,39 @@
                         <div class="p-5 text-center bg-light rounded border border-2 border-secondary border-opacity-25 position-relative"
                             style="border-style: dashed !important; cursor: pointer;"
                             onclick="document.getElementById('apartmentImages').click()">
-                            <div id="uploadPrompt" class="d-none">
-                                <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-2"></i>
-                                <h6 class="mb-1">Click to upload or directly drag images</h6>
-                                <p class="text-muted small mb-0">Supported: JPG, PNG</p>
-                            </div>
+
                             <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 justify-content-center">
-                                <!-- Mock existing images -->
-                                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    class="rounded object-fit-cover border shadow-sm" style="width: 80px; height: 80px;">
-                                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                    class="rounded object-fit-cover border shadow-sm" style="width: 80px; height: 80px;">
+                                @foreach ($apartment->images as $image)
+                                    <img src="{{ asset('storage/' . $image->image_path) }}"
+                                        class="rounded object-fit-cover border shadow-sm"
+                                        style="width: 80px; height: 80px;">
+                                @endforeach
                             </div>
-                            <input type="file" id="apartmentImages" multiple accept="image/*" class="d-none">
+                            <div id="uploadPrompt" class="{{ $apartment->images->count() > 0 ? 'mt-2' : '' }}">
+                                <i class="bi bi-cloud-arrow-up fs-2 text-primary"></i>
+                                <h6 class="mb-1">Click to replace all images</h6>
+                                <p class="text-muted small">Current photos will be removed if you upload new ones.</p>
+                            </div>
+                            <input type="file" name="images[]" id="apartmentImages" multiple accept="image/*"
+                                class="d-none">
                         </div>
-                        <div id="fileCount" class="form-text text-success mt-2">2 files selected</div>
+                        <small class="text-muted">Note: Uploading new images will replace the current ones.</small>
                     </div>
 
                     <div class="col-md-6">
                         <label for="apartmentLocation" class="form-label">Location</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                            <input type="text" class="form-control" id="apartmentLocation"
-                                placeholder="City, District, Street" value="Cambridge, MA" required>
+                            <input type="text" class="form-control" name="location"
+                                value="{{ old('location', $apartment->location) }}" required>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="apartmentArea" class="form-label">Area (sqm)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="apartmentArea" placeholder="e.g. 120"
-                                value="45" required>
+                            <input type="number" name="area" class="form-control"
+                                value="{{ old('area', $apartment->area) }}" required>
                             <span class="input-group-text">m²</span>
                         </div>
                     </div>
@@ -104,299 +114,179 @@
                     <div class="col-12">
                         <label class="form-label">Pin Location on Map</label>
                         <div id="map" style="height: 300px;" class="rounded border"></div>
-                        <div class="form-text text-muted">Click on the map to set the exact location.</div>
-                        <input type="hidden" id="apartmentLat" name="latitude" value="24.7136">
-                        <input type="hidden" id="apartmentLng" name="longitude" value="46.6753">
+                        <input type="hidden" id="apartmentLat" name="latitude" value="{{ $apartment->latitude }}">
+                        <input type="hidden" id="apartmentLng" name="longitude" value="{{ $apartment->longitude }}">
                     </div>
 
                     <div class="col-md-6">
                         <label for="nearestUniversity" class="form-label">Nearest University</label>
-                        <select class="form-select" id="nearestUniversity">
-                            <option disabled>Select University</option>
-                            <option value="ksu" selected>King Saud University</option>
-                            <option value="pnu">Princess Nourah University</option>
-                            <option value="psu">Prince Sultan University</option>
-                            <option value="yamamah">Al Yamamah University</option>
-                            <option value="iau">Imam Abdulrahman Bin Faisal University</option>
+                        <select class="form-select" name="university_id" required>
+                            @foreach ($universities as $uni)
+                                <option value="{{ $uni->id }}"
+                                    {{ $apartment->university_id == $uni->id ? 'selected' : '' }}>
+                                    {{ $uni->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="apartmentGender" class="form-label">Allowed Gender</label>
-                        <select class="form-select" id="apartmentGender" required>
-                            <option disabled>Select Gender</option>
-                            <option value="male" selected>Males</option>
-                            <option value="female">Females</option>
+                        <select class="form-select" name="gender" required>
+                            <option value="male" {{ $apartment->allowed_gender == 'male' ? 'selected' : '' }}>Males
+                            </option>
+                            <option value="female" {{ $apartment->allowed_gender == 'female' ? 'selected' : '' }}>Females
+                            </option>
                         </select>
                     </div>
 
                     <div class="col-12">
                         <label for="apartmentDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="apartmentDescription" rows="4"
-                            placeholder="Describe the apartment, nearby amenities, etc." required>A sunny studio apartment perfect for students.</textarea>
+                        <textarea class="form-control" name="description" rows="4" required>{{ old('description', $apartment->description) }}</textarea>
                     </div>
 
-                    <!-- Rent Details Section -->
                     <div class="col-12 mt-4">
                         <h5 class="mb-3 border-bottom pb-2">Rent & Pricing Details</h5>
                     </div>
 
                     <div class="col-12">
                         <label class="form-label d-block">Rent Type</label>
-                        <div class="btn-group" role="group" aria-label="Rent Type">
+                        <div class="btn-group">
                             <input type="radio" class="btn-check" name="rentType" id="rentWhole" value="whole"
-                                checked>
+                                {{ $apartment->rent_type == 'whole' ? 'checked' : '' }}>
                             <label class="btn btn-outline-primary" for="rentWhole">Whole Apartment</label>
 
-                            <input type="radio" class="btn-check" name="rentType" id="rentRooms" value="rooms">
+                            <input type="radio" class="btn-check" name="rentType" id="rentRooms" value="rooms"
+                                {{ $apartment->rent_type == 'rooms' ? 'checked' : '' }}>
                             <label class="btn btn-outline-primary" for="rentRooms">Separate Rooms</label>
                         </div>
                     </div>
 
-                    <!-- Whole Appt Price -->
                     <div class="col-md-6" id="wholePriceContainer">
-                        <label for="wholePrice" class="form-label">Price for Whole Apartment</label>
+                        <label class="form-label">Price for Whole Apartment</label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="wholePrice" placeholder="0.00"
-                                value="800">
+                            <input type="number" name="price" class="form-control" id="wholePrice"
+                                value="{{ $apartment->rent_type == 'whole' ? $apartment->price : '' }}">
                             <span class="input-group-text">/mo</span>
                         </div>
                     </div>
 
-                    <!-- Separate Rooms Details (Hidden by default) -->
                     <div class="col-md-12 row g-3 d-none" id="roomsContainer">
                         <div class="col-md-6">
-                            <label for="numberOfRooms" class="form-label">Number of Rooms</label>
-                            <input type="number" class="form-control" id="numberOfRooms" placeholder="e.g. 3">
+                            <label class="form-label">Number of Rooms</label>
+                            <input type="number" name="number_of_rooms" class="form-control" id="numberOfRooms"
+                                value="{{ $apartment->number_of_rooms }}">
                         </div>
                         <div class="col-md-6">
-                            <label for="roomPrice" class="form-label">Price per Room</label>
+                            <label class="form-label">Price per Room</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="roomPrice" placeholder="0.00">
+                                <input type="number" name="room_price" class="form-control" id="roomPrice"
+                                    value="{{ $apartment->rent_type == 'rooms' ? $apartment->price : '' }}">
                                 <span class="input-group-text">/mo</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Features Section -->
                     <div class="col-12 mt-4">
                         <h5 class="mb-3 border-bottom pb-2">Features & Amenities</h5>
                     </div>
-
                     <div class="col-12">
-                        <label class="form-label">Features & Amenities</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="featureInput"
-                                placeholder="Enter a feature (e.g. Free WiFi, Gym, Parking)">
+                            <input type="text" class="form-control" id="featureInput" placeholder="Add a feature">
                             <button class="btn btn-outline-primary" type="button" id="addFeatureBtn">Add</button>
                         </div>
                         <div id="featuresContainer" class="d-flex flex-wrap gap-2 mb-2">
-                            <!-- Features will be added here dynamically -->
-                            <span class="badge bg-light text-dark border p-2 d-flex align-items-center gap-2">
-                                Free WiFi
-                                <i class="bi bi-x text-danger" style="cursor: pointer;"
-                                    onclick="this.parentElement.remove()"></i>
-                            </span>
-                            <span class="badge bg-light text-dark border p-2 d-flex align-items-center gap-2">
-                                Air Conditioning
-                                <i class="bi bi-x text-danger" style="cursor: pointer;"
-                                    onclick="this.parentElement.remove()"></i>
-                            </span>
+                            @foreach ($apartment->features as $feature)
+                                <span class="badge bg-light text-dark border p-2 d-flex align-items-center gap-2">
+                                    {{ $feature->name }}
+                                    <i class="bi bi-x text-danger feature-remove" style="cursor: pointer;"></i>
+                                </span>
+                            @endforeach
                         </div>
-                        <div class="form-text text-muted">Type a feature and press Enter or click Add.</div>
-                        <!-- Hidden input to store all features for form submission -->
                         <input type="hidden" name="features" id="featuresList"
-                            value='["Free WiFi", "Air Conditioning"]'>
+                            value='{{ $apartment->features->pluck('name')->toJson() }}'>
                     </div>
 
-                    <!-- Actions -->
                     <div class="col-12 mt-5 d-flex gap-2 justify-content-end">
-                        <a href="owner-apartments.html" class="btn btn-light border">Cancel</a>
+                        <a href="{{ route('owner_apartments.index') }}" class="btn btn-light border">Cancel</a>
                         <button type="submit" class="btn btn-primary px-4">Save Changes</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
-
-
 @endsection
 
-
 @section('js')
-
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Custom Script for Rent Type Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const rentWholeRadio = document.getElementById('rentWhole');
-            const rentRoomsRadio = document.getElementById('rentRooms');
-            const wholePriceContainer = document.getElementById('wholePriceContainer');
-            const roomsContainer = document.getElementById('roomsContainer');
+            // --- Map Logic ---
+            const lat = {{ $apartment->latitude }};
+            const lng = {{ $apartment->longitude }};
+            var map = L.map('map').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            var marker = L.marker([lat, lng]).addTo(map);
 
-            function toggleRentType() {
-                if (rentWholeRadio.checked) {
-                    wholePriceContainer.classList.remove('d-none');
-                    roomsContainer.classList.add('d-none');
-                    // Add required to whole price, remove from room fields
-                    document.getElementById('wholePrice').setAttribute('required', '');
-                    document.getElementById('numberOfRooms').removeAttribute('required');
-                    document.getElementById('roomPrice').removeAttribute('required');
-                } else {
-                    wholePriceContainer.classList.add('d-none');
-                    roomsContainer.classList.remove('d-none');
-                    roomsContainer.classList.add(
-                        'd-flex'); // Since it's a row, ensure it displays correctly when shown
-                    // Add required to room fields, remove from whole price
-                    document.getElementById('wholePrice').removeAttribute('required');
-                    document.getElementById('numberOfRooms').setAttribute('required', '');
-                    document.getElementById('roomPrice').setAttribute('required', '');
-                }
-            }
-
-            // Initial check
-            toggleRentType();
-
-            // Listeners
-            rentWholeRadio.addEventListener('change', toggleRentType);
-            rentRoomsRadio.addEventListener('change', toggleRentType);
-
-            // Image Preview Logic
-            const imageInput = document.getElementById('apartmentImages');
-            const uploadPrompt = document.getElementById('uploadPrompt');
-            const previewContainer = document.getElementById('imagePreviewContainer');
-            const fileCount = document.getElementById('fileCount');
-
-            imageInput.addEventListener('change', function(e) {
-                const files = e.target.files;
-
-                if (files.length > 0) {
-                    uploadPrompt.classList.add('d-none');
-                    previewContainer.classList.remove('d-none');
-                    previewContainer.innerHTML = ''; // Clear previous previews
-
-                    fileCount.textContent = files.length + ' files selected';
-
-                    Array.from(files).forEach(file => {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = 'rounded object-fit-cover border shadow-sm';
-                            img.style.width = '80px';
-                            img.style.height = '80px';
-                            previewContainer.appendChild(img);
-                        }
-                        reader.readAsDataURL(file);
-                    });
-                } else {
-                    // Logic to handle clearing images if needed, but for edit page keeping existing is default if none selected
-                    // For now, if they select 0 files, we might want to show original images or prompt. 
-                    // This is simple logic for now.
-                    if (previewContainer.children.length === 0) {
-                        uploadPrompt.classList.remove('d-none');
-                        previewContainer.classList.add('d-none');
-                    }
-                    fileCount.textContent = '';
-                }
+            map.on('click', function(e) {
+                if (marker) marker.setLatLng(e.latlng);
+                else marker = L.marker(e.latlng).addTo(map);
+                document.getElementById('apartmentLat').value = e.latlng.lat;
+                document.getElementById('apartmentLng').value = e.latlng.lng;
             });
-            // Features Logic
+
+            // --- Features Logic ---
             const featureInput = document.getElementById('featureInput');
-            const addFeatureBtn = document.getElementById('addFeatureBtn');
             const featuresContainer = document.getElementById('featuresContainer');
             const featuresListInput = document.getElementById('featuresList');
 
             function updateFeaturesList() {
-                const features = Array.from(featuresContainer.children).map(badge => badge.textContent.trim());
+                const features = Array.from(featuresContainer.children).map(badge => badge.childNodes[0].textContent
+                    .trim());
                 featuresListInput.value = JSON.stringify(features);
             }
 
-            function addFeature() {
-                const value = featureInput.value.trim();
-                if (value) {
-                    const badge = document.createElement('span');
-                    badge.className = 'badge bg-light text-dark border p-2 d-flex align-items-center gap-2';
-                    badge.innerHTML = `${value} <i class="bi bi-x text-danger" style="cursor: pointer;"></i>`;
-
-                    // Add remove functionality
-                    badge.querySelector('i').addEventListener('click', function() {
-                        badge.remove();
-                        updateFeaturesList();
-                    });
-
-                    featuresContainer.appendChild(badge);
+            document.getElementById('addFeatureBtn').addEventListener('click', function() {
+                const val = featureInput.value.trim();
+                if (val) {
+                    const span = document.createElement('span');
+                    span.className = 'badge bg-light text-dark border p-2 d-flex align-items-center gap-2';
+                    span.innerHTML =
+                        `${val} <i class="bi bi-x text-danger feature-remove" style="cursor: pointer;"></i>`;
+                    featuresContainer.appendChild(span);
                     featureInput.value = '';
                     updateFeaturesList();
                 }
-            }
-
-            addFeatureBtn.addEventListener('click', addFeature);
-            featureInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addFeature();
-                }
             });
 
-            // Initialize remove buttons for existing items (if any)
-            featuresContainer.querySelectorAll('.bi-x').forEach(icon => {
-                icon.addEventListener('click', function() {
-                    this.parentElement.remove();
+            featuresContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('feature-remove')) {
+                    e.target.parentElement.remove();
                     updateFeaturesList();
-                });
-            });
-        });
-    </script>
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Map
-            // Default center: Riyadh (24.7136, 46.6753)
-            var map = L.map('map').setView([24.7136, 46.6753], 13);
-
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
-
-            var marker;
-            var latInput = document.getElementById('apartmentLat');
-            var lngInput = document.getElementById('apartmentLng');
-
-            // Pre-add marker for edit page
-            var initialLat = 24.7136;
-            var initialLng = 46.6753;
-            marker = L.marker([initialLat, initialLng]).addTo(map);
-
-
-            function onMapClick(e) {
-                if (marker) {
-                    map.removeLayer(marker);
                 }
-                marker = L.marker(e.latlng).addTo(map);
-                latInput.value = e.latlng.lat;
-                lngInput.value = e.latlng.lng;
+            });
 
-                // You could optionally fill the 'apartmentLocation' text field here if you had reverse geocoding
+            // --- Pricing Toggle ---
+            const rentWhole = document.getElementById('rentWhole');
+            const roomsContainer = document.getElementById('roomsContainer');
+            const wholePriceContainer = document.getElementById('wholePriceContainer');
+
+            function togglePricing() {
+                if (rentWhole.checked) {
+                    wholePriceContainer.classList.remove('d-none');
+                    roomsContainer.classList.add('d-none');
+                } else {
+                    wholePriceContainer.classList.add('d-none');
+                    roomsContainer.classList.remove('d-none');
+                }
             }
-
-            map.on('click', onMapClick);
+            rentWhole.addEventListener('change', togglePricing);
+            document.getElementById('rentRooms').addEventListener('change', togglePricing);
+            togglePricing(); // Run once on load
         });
     </script>
-
-
-    <script>
-        const el = document.getElementById("Apartments");
-        el.classList.add("active");
-    </script>
-
-
 @endsection

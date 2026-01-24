@@ -67,7 +67,7 @@ Route::resource('owner_apartments', ApartmentController::class)->middleware(['au
 Route::resource('request', RequestController::class)->middleware(['auth', 'OwnerAuth']);
 
 
-Route::resource('messages', MessagesController::class)->middleware(['auth', 'OwnerAuth']);
+// Route::resource('messages', MessagesController::class)->middleware(['auth', 'OwnerAuth']);
 
 Route::resource('ownerprofile', OwnerProfileController::class)->middleware(['auth', 'OwnerAuth']);
 
@@ -96,12 +96,26 @@ Route::patch('/owner/requests/{request}/{status}', [RequestController::class, 'u
 Route::get('apartment-deatails/{apartment}', [AllApartments::class, 'show'])->name('apartments_d');
 
 
-Route::get('messages_page', function () {
+// Route::get('messages_page', function () {
 
-    return view('messages');
+//     return view('messages');
 
-})->name('messages_page');
+// })->name('messages_page');
 
+
+// // Student Route
+// Route::get('/messages/{id}', [MessagesController::class, 'show'])->name('messages.show');
+// // If you have a general index for students
+// Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
+
+
+
+// Unified Messages Routes (Accessible by both Owner and Student)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{id}', [MessagesController::class, 'show'])->name('messages.show');
+    Route::post('/messages', [MessagesController::class, 'store'])->name('messages.store');
+});
 
 
 

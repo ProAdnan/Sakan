@@ -212,24 +212,25 @@
 
                             @if (Auth::id() === $apartment->owner_id)
                                 {{-- CASE 1: The user OWNS this specific apartment --}}
-                                <a href="{{ route('owner_apartments.index', $apartment->id) }}" class="btn btn-primary w-100">
+                                <a href="{{ route('owner_apartments.index', $apartment->id) }}"
+                                    class="btn btn-primary w-100">
                                     <i class="bi bi-pencil"></i> Manage My Apartment
                                 </a>
-
                             @elseif (Auth::user()->role == 'owner' || Auth::user()->role == 'admin')
                                 {{-- CASE 2: The user is AN owner or admin, but not the owner of THIS house --}}
                                 {{-- They still shouldn't be "joining" apartments like a student --}}
                                 <p class="text-muted text-center border p-2 rounded">
                                     Owners/Admins cannot request to join.
                                 </p>
-
                             @elseif ($alreadyRequested)
                                 {{-- CASE 3: It's a student who already clicked the button --}}
                                 <button class="btn btn-success disabled w-100">
                                     <i class="bi bi-check-circle"></i> Requested!
                                 </button>
+                                <a href="{{ route('messages.show', $apartment->owner_id) }}" class="btn btn-secondary">
+                                    Chat with Owner
+                                </a>
                             @else
-
                                 {{-- CASE 4: It's a student who hasn't requested yet --}}
                                 <form action="{{ route('apartment.request', $apartment->id) }}" method="POST"
                                     class="w-100">
@@ -237,6 +238,9 @@
                                     <button type="submit" class="btn btn-primary w-100">Request to Join</button>
                                 </form>
 
+                                <a href="{{ route('messages.show', $apartment->owner_id) }}" class="btn btn-secondary">
+                                    Chat with Owner
+                                </a>
                             @endif
                         @endauth
 

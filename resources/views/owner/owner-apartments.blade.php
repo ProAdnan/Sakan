@@ -95,7 +95,7 @@
                             <td>{{ $apart->views }}</td>
                             <td><span class="badge bg-success">{{ $apart->status }}</span></td>
                             <td>
-                                <a href="{{ route('apartments.edit', $apart->id) }}"
+                                <a href="{{ route('owner_apartments.edit', $apart->id) }}"
                                     class="btn btn-sm btn-light text-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>

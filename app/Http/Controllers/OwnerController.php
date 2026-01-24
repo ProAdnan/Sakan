@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Request;
+
+use App\Models\Apartment;
 
 class OwnerController extends Controller
 {
@@ -12,16 +14,36 @@ class OwnerController extends Controller
     public function index()
     {
 
-        // $apartments = Apartment::with('images')
-        //     ->where('owner_id', auth()->id())
-        //     ->latest()
-        //     ->get();
+
         $owner = auth()->user();
 
         $totalViews = $owner->ownedApartments()->sum('views');
 
+        $apartments = Apartment::with('images')
+            ->where('owner_id', auth()->id())
+            ->latest() ->take(5)
+            ->get();
 
-        return view('owner.owner-dashboard');
+        $apartments_num = Apartment::where('owner_id', auth()->id())->count();
+
+        $requests = Request::whereHas('apartment', function ($query) {
+            $query->where('owner_id', auth()->id());
+        })
+            ->with(['student', 'apartment']) // Eager load for performance
+            ->latest()->take(5)
+            ->get();
+
+
+        $requests_num = Request::whereHas('apartment', function ($query) {
+            $query->where('owner_id', auth()->id());
+        })
+            ->count();
+
+
+
+
+
+        return view('owner.owner-dashboard', compact('totalViews', 'apartments', 'apartments_num', 'requests', 'requests_num'));
     }
 
 
@@ -55,7 +77,7 @@ class OwnerController extends Controller
      */
     public function edit(string $id)
     {
-        //
+       
     }
 
     /**

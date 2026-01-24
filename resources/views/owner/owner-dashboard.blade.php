@@ -29,17 +29,20 @@
 
 
 @section('content')
+    @use('App\Models\Apartment')
 
-
+    @php
+        $username = Auth::user()->name;
+    @endphp
 
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h2 class="fw-bold mb-1">Welcome back, Alex!</h2>
+            <h2 class="fw-bold mb-1">Welcome back, {{ $username }}</h2>
             <p class="text-muted">Here's what's happening with your properties today.</p>
         </div>
         <button class="d-lg-none btn btn-primary"><i class="bi bi-list"></i> Menu</button>
-            
+
     </div>
 
     <!-- Stats Grid -->
@@ -48,7 +51,7 @@
             <div class="stats-card">
                 <div class="stats-icon blue"><i class="bi bi-building"></i></div>
                 <div class="stats-info">
-                    <h3>12</h3>
+                    <h3>{{ $apartments_num }}</h3>
                     <p>Active Apartments</p>
                 </div>
             </div>
@@ -57,7 +60,7 @@
             <div class="stats-card">
                 <div class="stats-icon orange"><i class="bi bi-eye"></i></div>
                 <div class="stats-info">
-                    <h3>1.2k</h3>
+                    <h3>{{ $totalViews }}</h3>
                     <p>Total Views</p>
                 </div>
             </div>
@@ -66,7 +69,7 @@
             <div class="stats-card">
                 <div class="stats-icon green"><i class="bi bi-chat-text"></i></div>
                 <div class="stats-info">
-                    <h3>5</h3>
+                    <h3>{{ $requests_num }}</h3>
                     <p>Total Requests</p>
                 </div>
             </div>
@@ -91,34 +94,45 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">JD</div>
-                                <span>John Doe</span>
-                            </div>
-                        </td>
-                        <td>Sunny Studio, Cambridge</td>
-                        <td>Oct 12, 2024</td>
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Pending</span>
-                        </td>
 
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">ES</div>
-                                <span>Emma Smith</span>
-                            </div>
-                        </td>
-                        <td>Modern Loft, Stanford</td>
-                        <td>Oct 10, 2024</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Approved</span>
-                        </td>
 
-                    </tr>
+                    @forelse($requests as $req)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 32px; height: 32px;">U</div>
+                                    <span>{{ $req->student->name }}</span>
+                                </div>
+                            </td>
+                            <td>{{ $req->apartment->name }}</td>
+                            <td>{{ $req->created_at->diffForHumans() }}</td>
+                            <td>
+
+                                <span
+                                    class="badge bg-{{ $req->status == 'approved' ? 'success' : ($req->status == 'rejected' ? 'danger' : 'warning') }}">
+                                    {{ ucfirst($req->status) }}
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                    @empty
+
+                        <tr>
+                            <td>No Requests Yet</td>
+                        </tr>
+                    @endforelse
+
+
+
+
+
+
+
+
+
                 </tbody>
             </table>
         </div>
@@ -128,7 +142,7 @@
     <div class="dashboard-card">
         <div class="card-header">
             <h5>My Properties</h5>
-            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            <a href="{{ route('owner_apartments.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
         </div>
         <div class="table-responsive">
             <table class="table mb-0">
@@ -143,26 +157,57 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                alt="Apt" class="rounded" width="60" height="40" style="object-fit: cover;">
-                        </td>
-                        <td class="fw-bold">Sunny Studio</td>
-                        <td>$800/mo</td>
-                        <td>Cambridge, MA</td>
-                        <td><span class="badge bg-success">Active</span></td>
 
-                    </tr>
-                    <tr>
-                        <td><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                alt="Apt" class="rounded" width="60" height="40" style="object-fit: cover;">
-                        </td>
-                        <td class="fw-bold">Modern Loft</td>
-                        <td>$1200/mo</td>
-                        <td>Stanford, CA</td>
-                        <td><span class="badge bg-secondary">Draft</span></td>
 
-                    </tr>
+
+                    @forelse($apartments as $apart)
+                        @php
+                            // Find the image marked as 'is_main'
+                            $mainImage = $apart->images->where('is_main', true)->first();
+                            // Fallback to the first image if no 'is_main' is found
+                            $displayImage = $mainImage ?? $apart->images->first();
+                        @endphp
+
+
+
+                        <tr>
+                            <td><img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}" alt="Apt"
+                                    class="rounded" width="60" height="40" style="object-fit: cover;">
+                            </td>
+                            <td class="fw-bold">{{ $apart->name }}</td>
+
+
+                            @if ($apart->rent_type == 'whole')
+                                <td>$ {{ $apart->price }}/mo</td>
+                            @elseif($apart->rent_type == 'rooms')
+                                <td>$ {{ $apart->price }}/room</td>
+                            @endif
+
+
+
+
+
+                            <td>{{ $apart->location }}</td>
+                            <td><span class="badge bg-success">Active</span></td>
+
+                        </tr>
+
+
+
+
+                    @empty
+                        <tr>
+                            <td>No Apartments Yet </td>
+                        </tr>
+                    @endforelse
+
+
+
+
+
+
+
+
                 </tbody>
             </table>
         </div>
