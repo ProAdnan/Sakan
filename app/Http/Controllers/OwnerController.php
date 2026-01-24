@@ -16,15 +16,15 @@ class OwnerController extends Controller
         //     ->where('owner_id', auth()->id())
         //     ->latest()
         //     ->get();
+        $owner = auth()->user();
 
-
-            
+        $totalViews = $owner->ownedApartments()->sum('views');
 
 
         return view('owner.owner-dashboard');
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.

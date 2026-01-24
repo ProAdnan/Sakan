@@ -59,6 +59,7 @@
                         <th>Title</th>
                         <th>Price</th>
                         <th>Location</th>
+                        <th>Views</th>
                         <th>Status</th>
                         <th colspan="2">Actions</th>
                     </tr>
@@ -91,6 +92,7 @@
                             </td>
 
                             <td>{{ $apart->location }}</td>
+                            <td>{{ $apart->views }}</td>
                             <td><span class="badge bg-success">{{ $apart->status }}</span></td>
                             <td>
                                 <a href="{{ route('apartments.edit', $apart->id) }}"

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
+use App\Models\Request;
 
 class RequestController extends Controller
 {
@@ -11,8 +12,34 @@ class RequestController extends Controller
      */
     public function index()
     {
-        return view('owner.owner-requests');
+
+
+        $requests = Request::whereHas('apartment', function ($query) {
+            $query->where('owner_id', auth()->id());
+        })
+            ->with(['student', 'apartment']) // Eager load for performance
+            ->latest()
+            ->get();
+
+        return view('owner.owner-requests', compact('requests'));
     }
+
+
+    public function updateStatus(Request $request, $status)
+    {
+        // Basic security: Ensure this owner actually owns the apartment in the request
+        if ($request->apartment->owner_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Validate the new status
+        if (in_array($status, ['approved', 'rejected', 'pending'])) {
+            $request->update(['status' => $status]);
+        }
+
+        return back()->with('success', 'Status updated to ' . ucfirst($status));
+    }
+
 
     /**
      * Show the form for creating a new resource.

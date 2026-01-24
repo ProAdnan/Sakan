@@ -35,6 +35,11 @@
         </div>
     </div>
 
+
+    @if (session('success'))
+        <p class="text-success">Updated Successfully!</p>
+    @endif
+
     <!-- Requests List -->
     <div class="dashboard-card">
         <div class="table-responsive">
@@ -50,77 +55,73 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">JD</div>
-                                <div>
-                                    <div class="fw-bold">John Doe</div>
-                                    <small class="text-muted">+1 234 567 890</small>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Sunny Studio, Cambridge</td>
-                        <td>Oct 12, 2024</td>
 
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Pending</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat-dots"></i>
-                                Message</button>
-                            <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i>
-                                Approve</button>
-                            <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">MK</div>
-                                <div>
-                                    <div class="fw-bold">Mike Ross</div>
-                                    <small class="text-muted">+1 987 654 321</small>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Sunny Studio, Cambridge</td>
-                        <td>Oct 11, 2024</td>
 
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Pending</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat-dots"></i>
-                                Message</button>
-                            <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i>
-                                Approve</button>
-                            <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">ES</div>
-                                <div>
-                                    <div class="fw-bold">Emma Smith</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Modern Loft, Stanford</td>
-                        <td>Oct 10, 2024</td>
 
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Approved</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat-dots"></i>
-                                Message</button>
-                            <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i>
-                                Approve</button>
-                            <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
-                        </td>
-                    </tr>
+                    @forelse($requests as $req)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 32px; height: 32px;">JD</div>
+                                    <div>
+                                        <div class="fw-bold">{{ $req->student->name }}</div>
+                                        <small class="text-muted">{{ $req->student->phone }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $req->apartment->name }}</td>
+                            <td>{{ $req->created_at->diffForHumans() }}</td>
+
+                            <td>
+                                <span
+                                    class="badge bg-{{ $req->status == 'approved' ? 'success' : ($req->status == 'rejected' ? 'danger' : 'warning') }}">
+                                    {{ ucfirst($req->status) }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat-dots"></i>
+                                    Message</button>
+
+
+                                @if ($req->status !== 'approved')
+                                    <form action="{{ route('owner.request.status', [$req->id, 'approved']) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button class="btn btn-sm btn-outline-success">Approve</button>
+                                    </form>
+                                @endif
+
+                                @if ($req->status !== 'rejected')
+                                    <form action="{{ route('owner.request.status', [$req->id, 'rejected']) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button class="btn btn-sm btn-outline-danger">Reject</button>
+                                    </form>
+                                @endif
+
+                                @if ($req->status !== 'pending')
+                                    <form action="{{ route('owner.request.status', [$req->id, 'pending']) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button class="btn btn-sm btn-outline-secondary">Reset</button>
+                                    </form>
+                                @endif
+
+
+                            </td>
+                        </tr>
+
+
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No requests found.</td>
+                        </tr>
+                    @endforelse
+
+
+
                 </tbody>
             </table>
         </div>

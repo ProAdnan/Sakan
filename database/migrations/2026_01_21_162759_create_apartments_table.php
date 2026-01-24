@@ -36,7 +36,7 @@ return new class extends Migration {
             $table->enum('status', ['available', 'rented', 'hidden'])->default('available');
 
             $table->unsignedBigInteger('views')->default(0);
-
+            
 
             $table->timestamps();
         });

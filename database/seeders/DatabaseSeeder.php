@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
            
             UserSeeder::class,
             PlansSeeder::class,
-            SakanSeeder::class
+            SakanSeeder::class,
+            UniversitiesSeeder::class,
         ]);
     }
 }

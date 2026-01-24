@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
-        
+
     ];
 
     /**
@@ -51,25 +51,34 @@ class User extends Authenticatable
 
 
 
-// Inside User class
-public function apartments() {
-    return $this->hasMany(Apartment::class, 'owner_id');
-}
+    // Inside User class
+    public function apartments()
+    {
+        return $this->hasMany(Apartment::class, 'owner_id');
+    }
 
-public function requests() {
-    return $this->hasMany(Request::class, 'student_id');
-}
+    public function studentRequests()
+    {
+        return $this->hasMany(Request::class, 'student_id');
+    }
 
-public function sentMessages() {
-    return $this->hasMany(Message::class, 'sender_id');
-}
+    public function ownedApartments()
+    {
+        return $this->hasMany(Apartment::class, 'owner_id');
+    }
 
-public function receivedMessages() {
-    return $this->hasMany(Message::class, 'receiver_id');
-}
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
 
 
 
 
-    
+
 }

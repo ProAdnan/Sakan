@@ -22,6 +22,15 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+
+    <style>
+        .chat-owner-btn::hover {
+            color: white;
+        }
+    </style>
+
+
 @endsection
 
 
@@ -193,8 +202,57 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary">Request to Join</button>
-                        <button class="btn btn-outline-primary"><i class="bi bi-chat-dots"></i> Chat with Owner</button>
+
+
+                        @if (session('error'))
+                            <p class="text-danger">{{ session('error') }}</p>
+                        @endif
+
+                        @auth
+
+                            @if (Auth::id() === $apartment->owner_id)
+                                {{-- CASE 1: The user OWNS this specific apartment --}}
+                                <a href="{{ route('owner_apartments.index', $apartment->id) }}" class="btn btn-primary w-100">
+                                    <i class="bi bi-pencil"></i> Manage My Apartment
+                                </a>
+
+                            @elseif (Auth::user()->role == 'owner' || Auth::user()->role == 'admin')
+                                {{-- CASE 2: The user is AN owner or admin, but not the owner of THIS house --}}
+                                {{-- They still shouldn't be "joining" apartments like a student --}}
+                                <p class="text-muted text-center border p-2 rounded">
+                                    Owners/Admins cannot request to join.
+                                </p>
+
+                            @elseif ($alreadyRequested)
+                                {{-- CASE 3: It's a student who already clicked the button --}}
+                                <button class="btn btn-success disabled w-100">
+                                    <i class="bi bi-check-circle"></i> Requested!
+                                </button>
+                            @else
+
+                                {{-- CASE 4: It's a student who hasn't requested yet --}}
+                                <form action="{{ route('apartment.request', $apartment->id) }}" method="POST"
+                                    class="w-100">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary w-100">Request to Join</button>
+                                </form>
+
+                            @endif
+                        @endauth
+
+
+
+                        @guest
+
+                            <p class="text-danger mt-2">You need to login before requesting.</p>
+                            <a href="{{ route('login') }}" class="btn btn-secondary">
+                                Login to Book
+                            </a>
+
+                        @endguest
+
+
+
                     </div>
 
                     <div class="mt-4 pt-3 border-top">

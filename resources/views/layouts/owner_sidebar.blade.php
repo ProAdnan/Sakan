@@ -17,7 +17,7 @@
         </li>
         <li class="sidebar-nav-item">
             <a href="{{ route('request.index') }}" id="Requests" class="sidebar-nav-link">
-                <i class="bi bi-people"></i> Requests <span class="badge bg-danger ms-auto rounded-pill">2</span>
+                <i class="bi bi-people"></i> Requests 
             </a>
         </li>
         <li class="sidebar-nav-item">
