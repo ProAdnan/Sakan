@@ -14,6 +14,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\OwnerProfileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\UniversitiesController;
 use App\Http\Controllers\UserRequestController;
 use App\Http\Controllers\UsersController;
@@ -31,11 +32,11 @@ Route::get('', [IndexController::class, 'index'])->name('index');
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
 
 
@@ -69,10 +70,11 @@ Route::resource('request', RequestController::class)->middleware(['auth', 'Owner
 
 // Route::resource('messages', MessagesController::class)->middleware(['auth', 'OwnerAuth']);
 
-Route::resource('ownerprofile', OwnerProfileController::class)->middleware(['auth', 'OwnerAuth']);
+Route::resource('ownerprofile', OwnerProfileController::class)->only(['edit', 'update'])->middleware(['auth', 'OwnerAuth']);
 
 
 
+//student
 
 Route::get('university', [AllUniversities::class, 'index'])->name('universitiesPage');
 
@@ -120,4 +122,14 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+Route::resource('profile', StudentProfileController::class)->middleware('auth');
+
+
+
 require __DIR__ . '/auth.php';
+
+
+
+
+
+

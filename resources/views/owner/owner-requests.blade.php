@@ -37,7 +37,7 @@
 
 
     @if (session('success'))
-        <p class="text-success">Updated Successfully!</p>
+        <p class="text-success">{{ session('success') }}</p>
     @endif
 
     <!-- Requests List -->
@@ -81,8 +81,12 @@
                             </td>
 
                             <td>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat-dots"></i>
-                                    Message</button>
+
+
+                                <a href="{{ route('messages.show', $req->student->id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-chat-dots"></i> Message
+                                </a>
 
 
                                 @if ($req->status !== 'approved')
@@ -109,6 +113,18 @@
                                     </form>
                                 @endif
 
+
+
+                                <form action="{{ route('request.destroy', $req->id) }}" method="POST"
+                                    class="d-inline delete-form">
+
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-light text-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </form>
 
                             </td>
                         </tr>

@@ -1,4 +1,5 @@
 @extends('layouts.master')
+
 @section('title', 'Sakan - Messages')
 
 
@@ -40,62 +41,143 @@
 @endsection
 
 @section('content')
+    <!-- Main Content -->
     <div class="chat-container">
+
+        <!-- Sidebar: Chat List -->
         <div class="chat-sidebar">
-            <ul class="chat-list p-0">
-                @foreach ($contacts as $item)
-                    <a href="{{ route('messages.show', $item['user']->id) }}" class="text-decoration-none">
-                        <li class="chat-item {{ isset($contact) && $contact->id == $item['user']->id ? 'active' : '' }}">
-                            <div class="chat-avatar text-white bg-primary d-flex align-items-center justify-content-center">
-                                {{ substr($item['user']->name, 0, 2) }}
-                            </div>
-                            <div class="chat-info">
-                                <div class="chat-name">
-                                    {{ $item['user']->name }} <span
-                                        class="chat-time">{{ $item['last_message']->created_at->format('h:i A') }}</span>
-                                </div>
-                                <div class="chat-preview">{{ $item['last_message']->content }}</div>
-                            </div>
-                        </li>
-                    </a>
-                @endforeach
+            <div class="chat-search-box">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" class="form-control bg-light border-start-0" placeholder="Search chats...">
+                </div>
+            </div>
+
+            <ul class="chat-list">
+                <!-- Active Chat Item -->
+                <li class="chat-item active">
+                    <div class="chat-avatar">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                            alt="Owner" style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">
+                            Ahmed Owner <span class="chat-time">10:45 AM</span>
+                        </div>
+                        <div class="chat-preview fw-semibold text-dark">
+                            Is the apartment still available?
+                        </div>
+                    </div>
+                    <span class="badge-unread">1</span>
+                </li>
+
+                <!-- Inactive Chat Item -->
+                <li class="chat-item">
+                    <div class="chat-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">
+                            Sara Roommate <span class="chat-time">Yesterday</span>
+                        </div>
+                        <div class="chat-preview">
+                            Hey, did you pay the electricity bill?
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Inactive Chat Item -->
+                <li class="chat-item">
+                    <div class="chat-avatar text-white bg-secondary">
+                        MK
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">
+                            Mike King <span class="chat-time">Mon</span>
+                        </div>
+                        <div class="chat-preview">
+                            Let's meet at the library.
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
 
+        <!-- Main: Chat Body -->
         <div class="chat-body">
-            @if (isset($contact))
-                <div class="chat-header">
-                    <div class="d-flex align-items-center">
-                        <h6 class="mb-0 fw-bold">{{ $contact->name }}</h6>
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="d-flex align-items-center">
+                    <div class="chat-avatar me-3">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                            alt="Owner" style="width: 40px; height: 40px; border-radius: 50%;">
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">Ahmed Owner</h6>
+                        <small class="text-success"><i class="bi bi-circle-fill" style="font-size: 8px;"></i>
+                            Online</small>
                     </div>
                 </div>
+                <div>
+                    <button class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-telephone"></i></button>
+                    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-three-dots-vertical"></i></button>
+                </div>
+            </div>
 
-                <div class="chat-messages" id="chatMessages">
-                    @foreach ($messages as $msg)
-                        <div class="message {{ $msg->sender_id == auth()->id() ? 'sent' : 'received' }}">
-                            {{ $msg->content }}
-                            <span class="message-time">{{ $msg->created_at->format('h:i A') }}</span>
-                        </div>
-                    @endforeach
+            <!-- Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="text-center text-muted small my-3">Today</div>
+
+                <div class="message sent">
+                    Hello Ahmed, I saw your listing for the studio apartment near university.
+                    <span class="message-time">10:30 AM <i class="bi bi-check2-all"></i></span>
                 </div>
 
-                <div class="chat-input-area">
-                    <form action="{{ route('messages.store') }}" method="POST" class="w-100 d-flex gap-2">
-                        @csrf
-                        <input type="hidden" name="receiver_id" value="{{ $contact->id }}">
-                        <input type="text" name="content" class="chat-input" placeholder="Type a message..." required
-                            autocomplete="off">
-                        <button class="btn btn-primary rounded-circle p-2" style="width: 45px; height: 45px;"
-                            type="submit">
-                            <i class="bi bi-send-fill"></i>
-                        </button>
-                    </form>
+                <div class="message received">
+                    Hi John! Yes, it is still available. Would you like to schedule a viewing?
+                    <span class="message-time">10:32 AM</span>
                 </div>
-            @else
-                <div class="h-100 d-flex align-items-center justify-content-center text-muted">
-                    Select an owner to start chatting.
+
+                <div class="message sent">
+                    That would be great. Are you free tomorrow afternoon?
+                    <span class="message-time">10:33 AM <i class="bi bi-check2-all"></i></span>
                 </div>
-            @endif
+
+                <div class="message received">
+                    Tomorrow at 2 PM works for me.
+                    <span class="message-time">10:45 AM</span>
+                </div>
+
+                <div class="message sent">
+                    Is the apartment still available?
+                    <span class="message-time">10:45 AM</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <button class="btn btn-light rounded-circle text-muted"><i class="bi bi-paperclip"></i></button>
+                <input type="text" class="chat-input" placeholder="Type a message...">
+                <button class="btn btn-primary rounded-circle p-2" style="width: 45px; height: 45px;"><i
+                        class="bi bi-send-fill"></i></button>
+            </div>
         </div>
     </div>
+
+
+@endsection
+
+
+@section('js')
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Simple script to scroll to bottom of chat
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    </script>
+
 @endsection

@@ -84,8 +84,14 @@ class RequestController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+
+        $request->delete();
+
+
+
+        return back()->with('success', 'Request Deleted Successfully!');
+
     }
 }

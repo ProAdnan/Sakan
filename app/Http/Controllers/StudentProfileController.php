@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+
+
 use App\Models\User;
 
-use Illuminate\Http\Request;
-
-class OwnerProfileController extends Controller
+class StudentProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
+
 
     }
 
@@ -47,57 +51,51 @@ class OwnerProfileController extends Controller
      */
     public function edit()
     {
-        $owner = auth()->user(); // Get currently logged in owner
-        return view('owner.owner-profile', compact('owner'));
+        $user = auth()->user();
+
+
+        return view('profile', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $owner = auth()->user();
+        // Force find the user from the DB to ensure we have the right instance
+        $user = User::findOrFail(Auth::id());
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required',
-            'string',
-            'lowercase',
-            'email',
-            'max:255',
-            'unique:' . User::class,
-
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'current_password' => 'nullable|required_with:new_password',
             'new_password' => 'nullable|min:8',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Update Basic Info
-        $owner->name = $request->name;
-        $owner->email = $request->email;
-        $owner->phone = $request->phone;
+        // Update fields
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
 
-        // Handle Image Upload
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($owner->image) {
-                Storage::delete('public/' . $owner->profile_image);
+            if ($user->profile_image) {
+                \Storage::disk('public')->delete($user->profile_image);
             }
-            $owner->profile_image = $request->file('image')->store('profile_images', 'public');
+            $path = $request->file('image')->store('profile_images', 'public');
+            $user->profile_image = $path;
         }
 
-        // Handle Password Change
-        if ($request->new_password) {
-            if (!Hash::check($request->current_password, $owner->password)) {
+        if ($request->filled('new_password')) {
+            if (!\Hash::check($request->current_password, $user->password)) {
                 return back()->with('error', 'Current password does not match.');
             }
-            $owner->password = Hash::make($request->new_password);
+            $user->password = \Hash::make($request->new_password);
         }
+        $user->save(); // This MUST return true if successful
 
-
-        $owner->save();
-        return back()->with('success', 'Profile updated successfully!');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 
     /**

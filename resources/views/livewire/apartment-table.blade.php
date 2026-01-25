@@ -82,7 +82,7 @@
                             <td><span class="badge bg-secondary">{{ $apart->allowed_gender }}</span></td>
                             <td>{{ number_format($apart->price, 2) }}</td>
                             <td>
-                                <button class="btn btn-sm btn-light text-primary"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-light text-primary"><a href="{{ route('apartments_d', $apart->id) }}"><i class="bi bi-eye"></i></a></button>
 
 
 

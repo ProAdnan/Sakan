@@ -114,7 +114,7 @@
 
                             <!-- Actions -->
                             <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                                <a href="admin-universities.html" class="btn btn-light btn-lg px-4">Cancel</a>
+                                <a href="{{ route('universities.index')}}" class="btn btn-light btn-lg px-4">Cancel</a>
                                 <button type="submit" name="submit" class="btn btn-primary btn-lg px-4">Create
                                     University</button>
                             </div>

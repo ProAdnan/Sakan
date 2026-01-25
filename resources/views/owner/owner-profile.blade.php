@@ -22,52 +22,70 @@
 @endsection
 
 
-
 @section('content')
 
 
 
-    <!-- Profile Header Card (Adapted from profile.html but without navbar padding) -->
     <div class="profile-header-card mb-5">
-        <h2 class="fw-bold fs-1">My Profile</h2><br><br>
+        <h2 class="fw-bold fs-1">My Profile</h2>
         <div class="profile-avatar-wrapper">
-            <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=fff&color=1E3A8A&size=128" alt="Profile"
-                class="profile-avatar">
-            <div class="profile-edit-btn">
-                <i class="bi bi-camera-fill"></i>
-            </div>
+            @php
+                $avatarUrl = $owner->profile_image
+                    ? asset('storage/' . $owner->profile_image)
+                    : 'https://ui-avatars.com/api/?name=' .
+                        urlencode($owner->name) .
+                        '&background=1E3A8A&color=fff&size=128';
+            @endphp
+            <img src="{{ $avatarUrl }}" alt="Profile" class="profile-avatar" id="avatarPreview">
         </div>
     </div>
 
-    <!-- Profile Form -->
     <div class="profile-form-card">
-        <form>
+        <form action="{{ route('ownerprofile.update', $owner->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            @if (session('success'))
+                <p class="text-success">{{ session('success') }}</p>
+            @endif
+
+            @if (session('error'))
+                <p class="text-danger">{{ session('error') }}</p>
+            @endif
+
+
             <div class="section-label">Personal Information</div>
             <div class="row g-4 mb-4">
+                <div class="col-md-12">
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" name="image" class="form-control" onchange="previewImage(event)">
+                </div>
                 <div class="col-md-6">
-                    <label for="fullName" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="fullName" value="Alex Johnson">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control" id="name" value="{{ $owner->name }}"
+                        required>
                 </div>
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" value="alex.j@example.com" disabled>
-                    <div class="form-text">Contact support to change email.</div>
+                    <input type="email" name="email" class="form-control" id="email" value="{{ $owner->email }}">
                 </div>
                 <div class="col-md-6">
                     <label for="phone" class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" id="phone" value="+1 234 567 8900">
+                    <input type="tel" name="phone" class="form-control" id="phone" value="{{ $owner->phone }}">
                 </div>
             </div>
 
             <div class="section-label">Security</div>
             <div class="row g-4 mb-4">
                 <div class="col-md-6">
-                    <label for="currentPassword" class="form-label">Current Password</label>
-                    <input type="password" class="form-control" id="currentPassword" placeholder="••••••••">
+                    <label for="current_password" class="form-label">Current Password</label>
+                    <input type="password" name="current_password" class="form-control" id="current_password"
+                        placeholder="••••••••">
                 </div>
                 <div class="col-md-6">
-                    <label for="newPassword" class="form-label">New Password</label>
-                    <input type="password" class="form-control" id="newPassword" placeholder="Leave blank to keep current">
+                    <label for="new_password" class="form-label">New Password</label>
+                    <input type="password" name="new_password" class="form-control" id="new_password"
+                        placeholder="Leave blank to keep current">
                 </div>
             </div>
 
@@ -75,10 +93,11 @@
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </form>
+
+
+
+
     </div>
-
-
-
 @endsection
 
 
@@ -89,6 +108,17 @@
         el.classList.add("active");
     </script>
 
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('avatarPreview');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

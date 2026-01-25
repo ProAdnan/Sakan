@@ -37,7 +37,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="admin-profile.html" class="text-decoration-none">Profile</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin_profile.index')}}" class="text-decoration-none">Profile</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit</li>
                 </ol>
             </nav>

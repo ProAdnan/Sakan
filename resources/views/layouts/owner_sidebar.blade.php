@@ -17,7 +17,7 @@
         </li>
         <li class="sidebar-nav-item">
             <a href="{{ route('request.index') }}" id="Requests" class="sidebar-nav-link">
-                <i class="bi bi-people"></i> Requests 
+                <i class="bi bi-people"></i> Requests
             </a>
         </li>
         <li class="sidebar-nav-item">
@@ -26,7 +26,7 @@
             </a>
         </li>
         <li class="sidebar-nav-item">
-            <a href="{{ route('ownerprofile.index') }}" id="Profile" class="sidebar-nav-link">
+            <a href="{{ route('ownerprofile.edit', Auth::user()->id) }}" id="Profile" class="sidebar-nav-link">
                 <i class="bi bi-person"></i> My Profile
             </a>
         </li>

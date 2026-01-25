@@ -108,7 +108,11 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ $uni->name }}</h5>
                                 <p class="text-muted"><i class="bi bi-geo-alt"></i>{{ $uni->location }}</p>
-                                <a href="apartments.html?uni=harvard" class="btn btn-secondary w-100">View Apartments</a>
+                                
+                                <a href="{{ route('apartmentspage', ['university_id' => $uni->id]) }}"
+                                    class="btn btn-secondary w-100">
+                                    View Apartments
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -167,8 +171,8 @@
                                     <i class="bi bi-mortarboard"></i> Near {{ $apart->university->name }}
                                 </div>
                                 <p class="text-muted small">{{ Str::limit($apart->description) }}</p>
-                                <a href="{{ route('apartments_d', $apart->id) }}"
-                                    class="btn btn-primary w-100 btn-sm">View Details</a>
+                                <a href="{{ route('apartments_d', $apart->id) }}" class="btn btn-primary w-100 btn-sm">View
+                                    Details</a>
                             </div>
                         </div>
                     </div>

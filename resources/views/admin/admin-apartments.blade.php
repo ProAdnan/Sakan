@@ -38,7 +38,7 @@
         </div>
     </div>
 
-   @livewire('apartment-table')
+    @livewire('apartment-table')
 
 @endsection
 
@@ -49,6 +49,11 @@
 
 
 @section('js')
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/sweet.js') }}"></script>
+
 
     <script>
         const el = document.getElementById("Apartments");

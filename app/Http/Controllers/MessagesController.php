@@ -13,7 +13,10 @@ class MessagesController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $contacts = $this->getContactsList($userId);
+
+        
+
+            $contacts = $this->getContactsList($userId);
 
         $view = Auth::user()->role == 'owner' ? 'owner.owner-messages' : 'messages';
         return view($view, compact('contacts'));
@@ -36,7 +39,7 @@ class MessagesController extends Controller
         $view = Auth::user()->role == 'owner' ? 'owner.owner-messages' : 'messages';
         return view($view, compact('contacts', 'messages', 'contact'));
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([

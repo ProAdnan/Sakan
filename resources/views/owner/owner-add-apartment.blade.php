@@ -33,7 +33,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item"><a href="owner-apartments.html" class="text-decoration-none">My
+                    <li class="breadcrumb-item"><a href="{{ route('owner_apartments.index')}}" class="text-decoration-none">My
                             Apartments</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add New</li>
                 </ol>
@@ -228,7 +228,7 @@
 
                     <!-- Actions -->
                     <div class="col-12 mt-5 d-flex gap-2 justify-content-end">
-                        <a href="owner-apartments.html" class="btn btn-light border">Cancel</a>
+                        <a href="{{ route('owner_apartments.index')}}" class="btn btn-light border">Cancel</a>
                         <button type="submit" class="btn btn-primary px-4">Create Apartment</button>
                     </div>
                 </div>

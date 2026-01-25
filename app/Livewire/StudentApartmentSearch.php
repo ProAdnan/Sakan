@@ -1,6 +1,9 @@
 <?php
 namespace App\Livewire;
 
+
+
+use Livewire\Attributes\Url; // Only for Livewire v3
 use App\Models\Apartment;
 use App\Models\University;
 use Livewire\Component;
@@ -12,12 +15,16 @@ class StudentApartmentSearch extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    // Filter Properties
     public $search = '';
+
+    #[Url] // This is the magic line
     public $university_id = '';
+
     public $minArea, $maxArea;
-    public $rentType = ''; // 'whole' or 'rooms'
+    public $rentType = '';
     public $minPrice, $maxPrice;
+
+
 
     // Reset page on filter change
     public function updated()

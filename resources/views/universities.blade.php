@@ -59,7 +59,7 @@
                                 <div class="university-location">
                                     <i class="bi bi-geo-alt"></i> {{ $uni->location }}
                                 </div>
-                                <a href="apartments.html?uni=harvard" class="btn btn-outline-primary w-100">View
+                                <a href="{{ route('apartmentspage', ['university_id' => $uni->id]) }}" class="btn btn-outline-primary w-100">View
                                     Apartments</a>
                             </div>
                         </div>

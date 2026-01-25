@@ -130,22 +130,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 5. Profile Save Handler
     const profileForm = document.querySelector('.profile-form-card form');
-    if (profileForm) {
-        profileForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = profileForm.querySelector('button[type="submit"]');
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+    // if (profileForm) {
+    //     profileForm.addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         const btn = profileForm.querySelector('button[type="submit"]');
+    //         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
 
-            setTimeout(() => {
-                btn.innerHTML = 'Changes Saved!';
-                btn.classList.replace('btn-primary', 'btn-success');
+    //         setTimeout(() => {
+    //             btn.innerHTML = 'Changes Saved!';
+    //             btn.classList.replace('btn-primary', 'btn-success');
 
-                setTimeout(() => {
-                    btn.innerHTML = 'Save Changes';
-                    btn.classList.replace('btn-success', 'btn-primary');
-                }, 2000);
-            }, 1000);
-        });
-    }
+    //             setTimeout(() => {
+    //                 btn.innerHTML = 'Save Changes';
+    //                 btn.classList.replace('btn-success', 'btn-primary');
+    //             }, 2000);
+    //         }, 1000);
+    //     });
+    // }
 
 });

@@ -31,40 +31,68 @@
 @section('content')
 
 
-    
+
 
     <div class="container mt-5 pt-5 pb-5">
 
-        <!-- Profile Header -->
-        <div class="profile-header-card">
+        <div class="profile-header-card mb-5">
             <h2 class="fw-bold fs-1">My Profile</h2>
-            <p class="opacity-75">Manage your personal information</p>
             <div class="profile-avatar-wrapper">
-                <img src="https://ui-avatars.com/api/?name=John+Doe&background=fff&color=1E3A8A&size=128" alt="Profile"
-                    class="profile-avatar">
-                <div class="profile-edit-btn">
-                    <i class="bi bi-camera-fill"></i>
-                </div>
+                @php
+                    // FIX: Changed $owner to $user
+                    $avatarUrl = $user->profile_image
+                        ? asset('storage/' . $user->profile_image)
+                        : 'https://ui-avatars.com/api/?name=' .
+                            urlencode($user->name) .
+                            '&background=1E3A8A&color=fff&size=128';
+                @endphp
+                <img src="{{ $avatarUrl }}" alt="Profile" class="profile-avatar" id="avatarPreview">
             </div>
         </div>
 
+
+
+
+
         <!-- content -->
         <div class="profile-form-card mt-5">
-            <form>
+
+            <form action="{{ route('profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                @if (session('success'))
+                    <p class="text-success">{{ session('success') }}</p>
+                @endif
+
+                @if (session('error'))
+                    <p class="text-danger">{{ session('error') }}</p>
+                @endif
+
+
                 <div class="section-label">Personal Information</div>
                 <div class="row g-4 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Profile Picture</label>
+                        <input type="file" name="image" class="form-control" onchange="previewImage(event)">
+                    </div>
+
                     <div class="col-md-6">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" value="John Doe">
+                        <input type="text" name="name" class="form-control" id="fullName"
+                            value="{{ $user->name }}">
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" value="john.doe@example.com" disabled>
+                        <input type="email" name="email" class="form-control" id="email"
+                            value="{{ $user->email }}">
                         <div class="form-text">Contact support to change email.</div>
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" value="+1 234 567 8900">
+                        <input type="tel" name="phone" class="form-control" id="phone"
+                            value="{{ $user->phone }}">
                     </div>
                 </div>
 
@@ -72,18 +100,19 @@
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
                         <label for="currentPassword" class="form-label">Current Password</label>
-                        <input type="password" class="form-control" id="currentPassword" placeholder="••••••••">
+                        <input type="password" name="current_password" class="form-control" id="currentPassword"
+                            placeholder="••••••••">
                     </div>
                     <div class="col-md-6">
                         <label for="newPassword" class="form-label">New Password</label>
-                        <input type="password" class="form-control" id="newPassword"
+                        <input type="password" name="new_password" class="form-control" id="newPassword"
                             placeholder="Leave blank to keep current">
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-5">
                     <button type="button" class="btn btn-secondary text-primary border-primary">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -101,5 +130,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="{{ asset('js/main.js') }}"></script>
+
+
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('avatarPreview');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
 
 @endsection

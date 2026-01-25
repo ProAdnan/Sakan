@@ -13,13 +13,15 @@ class AllApartments extends Controller
     public function index()
     {
 
-        $apartments = Apartment::with(['images', 'university'])->paginate(4);
+        // $apartments = Apartment::with(['images', 'university'])->paginate(4);
+
+        // return view('apartments', compact('apartments'));
+
+        // Just return the view. Livewire will handle the data fetching.
+        return view('apartments');
 
 
 
-
-
-        return view('apartments', compact('apartments'));
 
     }
 

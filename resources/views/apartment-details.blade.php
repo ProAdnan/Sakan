@@ -193,7 +193,7 @@
                 <div class="owner-card sticky-top" style="top: 100px;">
                     <h4 class="h5 fw-bold mb-4">Contact Owner</h4>
                     <div class="d-flex align-items-center mb-4">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        <img src="{{ asset('storage/' . $apartment->owner->profile_image) }}"
                             alt="Owner" class="owner-avatar me-3">
                         <div>
                             <h6 class="mb-0 fw-bold">{{ $apartment->owner->name ?? 'none' }}</h6>

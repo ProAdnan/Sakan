@@ -289,4 +289,10 @@
             togglePricing(); // Run once on load
         });
     </script>
+
+
+    <script>
+        const el = document.getElementById("Apartments");
+        el.classList.add("active");
+    </script>
 @endsection
