@@ -67,13 +67,24 @@
     padding-top: 1rem;
 }
 
-/* Main Content */
+/* Main Content */ /*oriiiiiiiigiiiinal*/
 .dashboard-main {
     flex: 1;
     margin-left: 280px;
     padding: 2rem;
     background-color: #F8FAFC;
 }
+
+/*neeeewwwww*/
+/* If inside the owner dashboard, adjust for the sidebar */
+.dashboard-main .chat-container {
+    left: 260px; /* Adjust this to match your owner sidebar width */
+    top: 0;      /* Usually dashboard has no top navbar, or adjust as needed */
+    height: 100vh;
+}
+
+
+
 
 /* Stats Cards */
 .stats-card {

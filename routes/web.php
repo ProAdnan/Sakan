@@ -7,14 +7,18 @@ use App\Http\Controllers\AllApartments;
 use App\Http\Controllers\AllUniversities;
 use App\Http\Controllers\ApartmentAdminController;
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\OwnerProfileController;
+use App\Http\Controllers\PlansController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\StudentProfileController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UniversitiesController;
 use App\Http\Controllers\UserRequestController;
 use App\Http\Controllers\UsersController;
@@ -85,9 +89,9 @@ Route::get('apartment', [AllApartments::class, 'index'])->name('apartmentspage')
 Route::post('/apartment/{apartment}/request', [UserRequestController::class, 'store'])
     ->name('apartment.request');
 
-// Route for starting a chat
-Route::get('/chat/{apartment}/{user}', [ChatController::class, 'show'])
-    ->name('chat.index');
+// // Route for starting a chat
+// Route::get('/chat/{apartment}/{user}', [ChatController::class, 'show'])
+//     ->name('chat.index');
 
 
 // Update request status (Approve/Reject)
@@ -112,19 +116,54 @@ Route::get('apartment-deatails/{apartment}', [AllApartments::class, 'show'])->na
 
 
 
-// Unified Messages Routes (Accessible by both Owner and Student)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
-    Route::get('/messages/{id}', [MessagesController::class, 'show'])->name('messages.show');
-    Route::post('/messages', [MessagesController::class, 'store'])->name('messages.store');
-});
+// // Unified Messages Routes (Accessible by both Owner and Student)
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/messages', [MessagesController::class, 'index'])->name('messages.index');
+//     Route::get('/messages/{id}', [MessagesController::class, 'show'])->name('messages.show');
+//     Route::post('/messages', [MessagesController::class, 'store'])->name('messages.store');
+// });
 
 
 
 
 Route::resource('profile', StudentProfileController::class)->middleware('auth');
 
+Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
 
+
+
+Route::get('/messages/{receiver_id}', [MessageController::class, 'show'])->name('messages.show');
+
+
+
+Route::resource('plans', PlansController::class)->middleware(['auth', 'OwnerAuth']);
+
+
+
+
+Route::prefix('plan')->group(function () {
+
+    Route::get('/plans', [PlansController::class, 'index'])->name('plans.index');
+
+
+});
+
+// Subscription Flow
+Route::get('/subscribe/{plan}', [SubscriptionController::class, 'subscribe'])->name('plans.subscribe');
+
+
+
+// Card Flow
+// Notice we use {plan} here so we can easily fetch it in the Controller
+Route::get('/card/new/{plan}', [CardController::class, 'create'])->name('card.create');
+Route::post('/card/store', [CardController::class, 'store'])->name('card.store');
+
+
+
+Route::get('/subscribe/confirm/{plan}', [SubscriptionController::class, 'confirm'])->name('plans.confirm');
+
+
+Route::post('/subscribe/finalize/{plan}', [SubscriptionController::class, 'finalize'])->name('plans.finalize');
 
 require __DIR__ . '/auth.php';
 

@@ -1,204 +1,150 @@
-/* Message Page Layout */
-.chat-container {
-    height: calc(100vh - 76px);
-    /* Adjust based on navbar height */
-    margin-top: 76px;
-    /* Offset for fixed navbar */
-    margin-bottom: 0;
-    width: 100%;
-    background: var(--surface);
-    border-radius: 0;
-    box-shadow: none;
-    overflow: hidden;
-    display: flex;
+/* 1. Force the page to be a fixed window */
+html, body {
+    height: 100vh !important;
+    width: 100vw !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important; /* This stops the "page" from scrolling */
 }
-
-/* Chat Sidebar */
+/* 2. The Main Container - Fixed to the viewport */
+.chat-container {
+    display: flex;
+    position: fixed;
+    top: 76px;    /* Height of your Navbar */
+    bottom: 0;    /* Force it to touch the bottom of the screen */
+    left: 0;
+    right: 0;
+    width: 100vw;
+    background: #fff;
+    z-index: 1000; /* Sit above the footer */
+}
+/* 3. Sidebar stays fixed */
 .chat-sidebar {
     width: 350px;
-    border-right: 1px solid var(--border);
+    min-width: 350px;
+    height: 100%;
+    border-right: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
-    background-color: white;
 }
-
-.chat-search-box {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.chat-list {
+/* 4. Chat Area - The wrapper for the Livewire component */
+.chat-area {
     flex: 1;
-    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative; /* Crucial for internal sizing */
+}
+
+
+/* 5. The Component inner wrapper (Livewire div) */
+.chat-component-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+/* 6. The Messages - This is the ONLY thing allowed to scroll */
+#chatMessages {
+    flex: 1; 
+    overflow-y: auto !important;
+    padding: 20px;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Prevents it from expanding the parent */
+}
+.chat-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
 .chat-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    border-bottom: 1px solid var(--background);
+    border-bottom: 1px solid #f1f5f9;
+    transition: 0.2s;
 }
 
-.chat-item:hover {
-    background-color: var(--background);
+.chat-item a {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .chat-item.active {
-    background-color: #Eff6ff;
-    border-left: 4px solid var(--primary);
+    background-color: #eff6ff;
+    border-left: 4px solid #007bff;
 }
 
-.chat-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 1rem;
-    background-color: #E0E7FF;
+.message-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    font-size: 1.2rem;
-}
-
-.chat-info {
-    flex: 1;
-    overflow: hidden;
-}
-
-.chat-name {
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 0.25rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-.chat-time {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-weight: 400;
-}
-
-.chat-preview {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.badge-unread {
-    background-color: var(--accent);
-    color: white;
-    font-size: 0.7rem;
-    padding: 0.25em 0.6em;
-    border-radius: 50%;
-    margin-left: 0.5rem;
-}
-
-/* Chat Body */
-.chat-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #F8FAFC;
-}
-
-.chat-header {
-    padding: 1rem 1.5rem;
-    background-color: white;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 1.5rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.message {
-    max-width: 70%;
-    padding: 0.75rem 1rem;
-    border-radius: 1rem;
-    position: relative;
-    word-wrap: break-word;
-}
-
-.message.received {
-    align-self: flex-start;
-    background-color: white;
-    border: 1px solid var(--border);
-    border-bottom-left-radius: 0.25rem;
-}
-
-.message.sent {
-    align-self: flex-end;
-    background-color: var(--primary);
-    color: white;
-    border-bottom-right-radius: 0.25rem;
-}
-
-.message-time {
-    font-size: 0.7rem;
-    margin-top: 0.25rem;
-    text-align: right;
     width: 100%;
-    display: block;
-    opacity: 0.7;
+    margin-bottom: 15px;
 }
-
+/* 7. The Input Area - Locked to the bottom of .chat-area */
 .chat-input-area {
-    padding: 1rem 1.5rem;
-    background-color: white;
-    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    background: white;
+    border-top: 1px solid #dee2e6;
+    padding: 15px;
+    width: 100%;
+}
+/* Custom scrollbar for a cleaner look */
+#chatMessages::-webkit-scrollbar, .chat-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+#chatMessages::-webkit-scrollbar-thumb, .chat-sidebar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+
+
+/* The actual message bubble */
+.message {
+    max-width: 70%;       /* Prevents the bubble from being too wide */
+    padding: 10px 16px;   /* Space inside the bubble */
+    border-radius: 18px;  /* Rounded corners */
+    font-size: 0.95rem;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Messages sent by YOU */
+.message.sent {
+    background-color: #007bff; /* Blue */
+    color: white;
+    border-bottom-right-radius: 4px; /* WhatsApp style sharp corner */
+    margin-left: auto; /* Extra push to the right */
+}
+
+/* Messages received from OTHERS */
+.message.received {
+    background-color: #ffffff; /* White */
+    color: #333;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 4px; /* WhatsApp style sharp corner */
+    margin-right: auto; /* Extra push to the left */
+}
+
+/* Space for the timestamp inside the bubble */
+.message-meta {
+    font-size: 0.75rem;
+    margin-top: 4px;
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    justify-content: flex-end;
+    opacity: 0.8;
 }
 
-.chat-input {
-    flex: 1;
-    border-radius: 1.5rem;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--border);
-    background-color: var(--background);
+.message.sent .message-meta {
+    color: #e0e0e0;
 }
 
-.chat-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background-color: white;
+.message.received .message-meta {
+    color: #888;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .chat-container {
-        flex-direction: column;
-        height: calc(100vh - 76px);
-        /* Keep sidebar and body within view */
-    }
-
-    .chat-sidebar {
-        width: 100%;
-        height: 40%;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .chat-body {
-        height: 60%;
-    }
-}

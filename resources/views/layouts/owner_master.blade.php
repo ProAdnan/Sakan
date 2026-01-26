@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+@vite(['resources/js/app.js'])
+
 
 
 @include('layouts.head')
+
+
 @livewireStyles
+
+
 
 
 <body>
@@ -26,6 +32,11 @@
 
     @yield('js')
     @livewireScripts
+
+
+
+
+
 
 
 </body>

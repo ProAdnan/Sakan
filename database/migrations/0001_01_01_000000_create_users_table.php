@@ -26,6 +26,9 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
+
+            $table->string('card_token')->nullable(); // This simulates having a card on file
+
             $table->rememberToken();
             $table->timestamps();
         });

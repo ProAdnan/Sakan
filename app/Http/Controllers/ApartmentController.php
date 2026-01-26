@@ -34,6 +34,27 @@ class ApartmentController extends Controller
      */
     public function create()
     {
+
+
+
+        $user = auth()->user();
+
+        // If they can't create, find out why and redirect
+        if (!$user->canCreateApartment()) {
+            $sub = $user->subscription;
+
+            if (!$sub || $sub->status !== 'active' || now()->greaterThan($sub->end_date)) {
+                return redirect()->route('plans.index')
+                    ->with('error', 'You need an active subscription to list apartments.');
+            }
+
+            return redirect()->route('plans.index')
+                ->with('error', 'You have reached the maximum apartment limit for your plan. Please upgrade.');
+        }
+
+
+
+
         $universities = University::all();
         return view('owner.owner-add-apartment', compact('universities'));
     }

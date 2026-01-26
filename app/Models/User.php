@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'card_token',
 
     ];
 
@@ -67,14 +68,36 @@ class User extends Authenticatable
         return $this->hasMany(Apartment::class, 'owner_id');
     }
 
-    public function sentMessages()
+
+    public function subscription()
     {
-        return $this->hasMany(Message::class, 'sender_id');
+        // Gets the latest active subscription
+        return $this->hasOne(Subscription::class, 'owner_id')->latestOfMany();
     }
 
-    public function receivedMessages()
+
+
+
+
+    public function canCreateApartment(): bool
     {
-        return $this->hasMany(Message::class, 'receiver_id');
+        $sub = $this->subscription;
+
+        // 1. Check if they even have a subscription
+        if (!$sub || $sub->status !== 'active') {
+            return false;
+        }
+
+        // 2. Check if the subscription has expired
+        if (now()->greaterThan($sub->end_date)) {
+            return false;
+        }
+
+        // 3. Check apartment limit based on plan
+        $maxAllowed = $sub->plan->max_apartments;
+        $currentCount = $this->ownedApartments()->count();
+
+        return $currentCount < $maxAllowed;
     }
 
 

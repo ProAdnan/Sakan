@@ -91,82 +91,85 @@
                 premium tools and reach.</p>
         </div>
 
+
+
+        @if (session('error'))
+            <p class="text-danger">{{ session('error') }}</p>
+        @endif
+
         <div class="row g-4 justify-content-center">
-            <!-- Basic Plan -->
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card p-4">
-                    <h4 class="fw-bold mb-3">Starter</h4>
-                    <div class="mb-4">
-                        <span class="plan-price">$5</span>
-                        <span class="plan-period">/ 10 days</span>
-                    </div>
-                    <p class="text-muted mb-4">Perfect for trying out the platform for a short period.</p>
 
-                    <ul class="list-unstyled feature-list mb-5">
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Post up to 3 Apartments</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Basic Support</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Standard Visibility</li>
-                        <li><i class="bi bi-x-circle text-muted opacity-50"></i> Featured Listings</li>
-                        <li><i class="bi bi-x-circle text-muted opacity-50"></i> Analytics Dashboard</li>
-                    </ul>
 
-                    <div class="mt-auto">
-                        <a href="owner-checkout.html?plan=starter&price=5"
-                            class="btn btn-outline-primary w-100 py-3 fw-semibold">Go Premium</a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Popular Plan -->
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card popular p-4">
-                    <h4 class="fw-bold mb-3">Professional</h4>
-                    <div class="mb-4">
-                        <span class="plan-price">$20</span>
-                        <span class="plan-period">/ month</span>
-                    </div>
-                    <p class="text-muted mb-4">Our most popular plan for serious property owners.</p>
+            @forelse ($plans as $plan)
+                <!--  Plan -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card p-4">
+                        <h4 class="fw-bold mb-3">{{ $plan->name }}</h4>
+                        <div class="mb-4">
+                            <span class="plan-price">$ {{ $plan->price }}</span>
+                            <span class="plan-period">{{ $plan->duration_days }}/ year</span>
+                        </div>
+                        <p class="text-muted mb-4">{{ $plan->description }}</p>
 
-                    <ul class="list-unstyled feature-list mb-5">
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Post up to 15 Apartments</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Priority Support</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Enhanced Visibility</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> 3 Featured Listings</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Basic Analytics</li>
-                    </ul>
 
-                    <div class="mt-auto">
-                        <a href="owner-checkout.html?plan=professional&price=20"
-                            class="btn btn-primary w-100 py-3 fw-semibold shadow-sm">Go Premium</a>
-                    </div>
-                </div>
-            </div>
+                        @if ($plan->name == 'Starter')
+                            <ul class="list-unstyled feature-list mb-5">
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Post up to
+                                    {{ $plan->max_apartments }} Apartments</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Basic Support</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Standard Visibility</li>
+                                <li><i class="bi bi-x-circle text-muted opacity-50"></i> Featured Listings</li>
+                                <li><i class="bi bi-x-circle text-muted opacity-50"></i> Analytics Dashboard</li>
+                            </ul>
+                        @elseif($plan->name == 'Professional')
+                            <ul class="list-unstyled feature-list mb-5">
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Post up to
+                                    {{ $plan->max_apartments }} Apartments</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Priority Support</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Enhanced Visibility</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Featured Listings</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Basic Analytics</li>
+                            </ul>
+                        @elseif($plan->name == 'Enterprise')
+                            <ul class="list-unstyled feature-list mb-5">
 
-            <!-- Unlimited Plan -->
-            <div class="col-md-6 col-lg-4">
-                <div class="pricing-card p-4">
-                    <h4 class="fw-bold mb-3">Enterprise</h4>
-                    <div class="mb-4">
-                        <span class="plan-price">$50</span>
-                        <span class="plan-period">/ year</span>
-                    </div>
-                    <p class="text-muted mb-4">Ultimate value with unlimited boundaries.</p>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Unlimited Apartments</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> 24/7 Dedicated Support</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Top Search Ranking</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Unlimited Featured Listings
+                                </li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Advanced Analytics</li>
+                            </ul>
+                        @endif
 
-                    <ul class="list-unstyled feature-list mb-5">
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Unlimited Apartments</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> 24/7 Dedicated Support</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Top Search Ranking</li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Unlimited Featured Listings
-                        </li>
-                        <li><i class="bi bi-check-circle-fill text-primary"></i> Advanced Analytics</li>
-                    </ul>
 
-                    <div class="mt-auto">
-                        <a href="owner-checkout.html?plan=enterprise&price=50"
-                            class="btn btn-outline-primary w-100 py-3 fw-semibold">Go Premium</a>
+
+
+                        <div class="mt-auto">
+
+
+                            <a href="{{ route('plans.subscribe', $plan->id) }}"
+                                class="btn btn-outline-primary w-100 py-3 fw-semibold">
+                                Go Premium
+                            </a>
+
+
+
+
+                        </div>
                     </div>
                 </div>
-            </div>
+
+
+
+
+            @empty
+                <p>no plans yet</p>
+            @endforelse
+
+
+
         </div>
     </div>
 
