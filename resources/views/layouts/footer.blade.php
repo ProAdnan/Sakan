@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="text-center mt-5 pt-4 border-top">
-                <p class="text-muted text-sm">&copy; 2024 Sakan. All rights reserved.</p>
+                <p class="text-muted text-sm">&copy; {{ date('Y') }}  Sakan. All rights reserved.</p>
             </div>
         </div>
     </footer>

@@ -55,8 +55,12 @@ class UniversitiesSeeder extends Seeder
                 'image' => 'universities/t.jpg',
 
             ],
+            [
+                'name' => 'Jordan University of Science and Technology',
+                'location' => 'Irbid , Jordan',
+                'image' => 'universities/z.jpg',
 
-
+            ],
 
 
 

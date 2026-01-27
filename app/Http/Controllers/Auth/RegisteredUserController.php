@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
             'phone' => $request->phone,
             'gender' => $request->gender,
-
+            'profile_image' => 'profile_images/simple.jpg',
 
         ]);
 

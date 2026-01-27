@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Request as Req; // Alias your Model
+
 
 use App\Models\User;
 
@@ -53,8 +55,14 @@ class StudentProfileController extends Controller
     {
         $user = auth()->user();
 
+        $my_requests = Req::whereHas('apartment', function ($query) {
 
-        return view('profile', compact('user'));
+            $query->where('student_id', auth()->id()); // Corrected ID call
+
+        })->get();
+
+
+        return view('profile', compact('user', 'my_requests'));
     }
 
     /**
@@ -101,8 +109,13 @@ class StudentProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Req $profile)
     {
-        //
+
+
+        $profile->delete();
+
+        return redirect()->route('profile.edit', Auth::id())->with('req', 'Request deleted');
+
     }
 }

@@ -34,17 +34,33 @@
                     </div>
 
                     <div class="filter-group">
+                        <div class="filter-title">Gender</div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" name="gender" type="radio" wire:model.live="gender" value="" id="genderall">
+                            <label class="form-check-label" for="genderall">All ({{ \App\Models\Apartment::count() }})</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" name="gender" type="radio" wire:model.live="gender" value="male" id="male">
+                            <label class="form-check-label" for="male">Male ({{ \App\Models\Apartment::where('allowed_gender', 'male')->count() }})</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" name="gender" type="radio" wire:model.live="gender" value="female" id="female">
+                            <label class="form-check-label" for="female">Female ({{ \App\Models\Apartment::where('allowed_gender', 'female')->count() }})</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
                         <div class="filter-title">Rent Type</div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" wire:model.live="rentType" value="" id="rentall">
+                            <input class="form-check-input" name="rent" type="radio" wire:model.live="rentType" value="" id="rentall">
                             <label class="form-check-label" for="rentall">All ({{ \App\Models\Apartment::count() }})</label>
                         </div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" wire:model.live="rentType" value="whole" id="rentWhole">
+                            <input class="form-check-input" name="rent" type="radio" wire:model.live="rentType" value="whole" id="rentWhole">
                             <label class="form-check-label" for="rentWhole">Whole ({{ \App\Models\Apartment::where('rent_type', 'whole')->count() }})</label>
                         </div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" wire:model.live="rentType" value="rooms" id="rentRooms">
+                            <input class="form-check-input" name="rent" type="radio" wire:model.live="rentType" value="rooms" id="rentRooms">
                             <label class="form-check-label" for="rentRooms">Rooms ({{ \App\Models\Apartment::where('rent_type', 'rooms')->count() }})</label>
                         </div>
                     </div>

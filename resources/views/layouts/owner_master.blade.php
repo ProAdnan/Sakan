@@ -3,6 +3,7 @@
 @vite(['resources/js/app.js'])
 
 
+<link rel="icon" type="image/x-icon" href="{{ asset('img/14025056.png')}}">
 
 @include('layouts.head')
 

@@ -22,6 +22,8 @@ class StudentApartmentSearch extends Component
 
     public $minArea, $maxArea;
     public $rentType = '';
+    public $gender = '';
+
     public $minPrice, $maxPrice;
 
 
@@ -42,6 +44,7 @@ class StudentApartmentSearch extends Component
         })
             ->when($this->university_id, fn($q) => $q->where('university_id', $this->university_id))
             ->when($this->rentType, fn($q) => $q->where('rent_type', $this->rentType))
+            ->when($this->gender, fn($q) => $q->where('allowed_gender', $this->gender))
             ->when($this->minArea, fn($q) => $q->where('area', '>=', $this->minArea))
             ->when($this->maxArea, fn($q) => $q->where('area', '<=', $this->maxArea))
             ->when($this->minPrice, fn($q) => $q->where('price', '>=', $this->minPrice))

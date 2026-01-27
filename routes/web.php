@@ -9,6 +9,7 @@ use App\Http\Controllers\ApartmentAdminController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessagesController;
@@ -164,6 +165,8 @@ Route::get('/subscribe/confirm/{plan}', [SubscriptionController::class, 'confirm
 
 
 Route::post('/subscribe/finalize/{plan}', [SubscriptionController::class, 'finalize'])->name('plans.finalize');
+
+Route::post('/apartments/{apartment}/comments', [CommentController::class, 'store'])->name('comments.store');
 
 require __DIR__ . '/auth.php';
 

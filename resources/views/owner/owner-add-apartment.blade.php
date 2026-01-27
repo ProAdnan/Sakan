@@ -78,7 +78,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <label for="apartmentName" class="form-label">Apartment Name</label>
+                        <label for="apartmentName" class="form-label">Apartment Title</label>
                         <input type="text" class="form-control" id="apartmentName"
                             placeholder="e.g. Sunny Studio in Downtown" name="name" required>
                     </div>

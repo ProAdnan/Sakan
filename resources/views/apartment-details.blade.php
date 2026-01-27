@@ -183,7 +183,34 @@
                     <div id="map" style="height: 400px; z-index: 1;" class="rounded border"></div>
                 </div>
 
+                <div class="mt-5">
+                    <h4>Comments ({{ $apartment->comments->count() }})</h4>
 
+                    @auth
+                        <form action="{{ route('comments.store', $apartment->id) }}" method="POST" class="mb-4">
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" name="content" class="form-control" placeholder="Add a comment..."
+                                    required>
+                                <button class="btn btn-primary" type="submit">Post</button>
+                            </div>
+                        </form>
+                    @else
+                        <p class="text-muted">Please <a href="{{ route('login') }}">login</a> to leave a comment.</p>
+                    @endauth
+
+                    <div class="comment-list">
+                        @foreach ($apartment->comments as $comment)
+                            <div class="p-3 mb-2 border-bottom">
+                                <div class="d-flex justify-content-between">
+                                    <strong>{{ $comment->user->name }}</strong>
+                                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                </div>
+                                <p class="mb-0">{{ $comment->content }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
 
 
             </div>
@@ -193,8 +220,8 @@
                 <div class="owner-card sticky-top" style="top: 100px;">
                     <h4 class="h5 fw-bold mb-4">Contact Owner</h4>
                     <div class="d-flex align-items-center mb-4">
-                        <img src="{{ asset('storage/' . $apartment->owner->profile_image) }}"
-                            alt="Owner" class="owner-avatar me-3">
+                        <img src="{{ asset('storage/' . $apartment->owner->profile_image) }}" alt="Owner"
+                            class="owner-avatar me-3">
                         <div>
                             <h6 class="mb-0 fw-bold">{{ $apartment->owner->name ?? 'none' }}</h6>
                             <small class="text-muted">Owner</small>
@@ -279,6 +306,11 @@
             </div>
         </div>
     </div>
+
+
+
+
+
 
 @endsection
 

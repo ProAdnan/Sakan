@@ -24,6 +24,7 @@ class User extends Authenticatable
         'phone',
         'role',
         'card_token',
+        'profile_image',
 
     ];
 
