@@ -86,10 +86,14 @@ Route::get('university', [AllUniversities::class, 'index'])->name('universitiesP
 
 Route::get('apartment', [AllApartments::class, 'index'])->name('apartmentspage');
 
-// Route for submitting a request
-Route::post('/apartment/{apartment}/request', [UserRequestController::class, 'store'])
-    ->name('apartment.request');
 
+Route::get('/apartment/{apartment}/Confirm Request', [UserRequestController::class, 'index'])
+    ->name('apartment.confirm');
+
+// Route for submitting a request
+Route::post('/requests/{apartments}', [UserRequestController::class, 'store'])
+    ->name('apartment.request');
+    
 // // Route for starting a chat
 // Route::get('/chat/{apartment}/{user}', [ChatController::class, 'show'])
 //     ->name('chat.index');

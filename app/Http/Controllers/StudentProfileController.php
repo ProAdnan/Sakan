@@ -88,7 +88,7 @@ class StudentProfileController extends Controller
         $user->phone = $request->phone;
 
         if ($request->hasFile('image')) {
-            if ($user->profile_image) {
+            if ($user->profile_image != 'profile_images/simple.jpg') {
                 \Storage::disk('public')->delete($user->profile_image);
             }
             $path = $request->file('image')->store('profile_images', 'public');

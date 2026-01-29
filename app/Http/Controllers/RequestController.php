@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 use App\Models\Request;
+use App\Notifications\RequestStatusUpdated;
+use Illuminate\Notifications\Notifiable; // <-- Must have this
 
 class RequestController extends Controller
 {
+
+    use Notifiable;
     /**
      * Display a listing of the resource.
      */
@@ -36,6 +40,10 @@ class RequestController extends Controller
         if (in_array($status, ['approved', 'rejected', 'pending'])) {
             $request->update(['status' => $status]);
         }
+
+        // Send notification to the student
+        $student = $request->student; // Assumes relation in model
+        $student->notify(new RequestStatusUpdated($request, $status));
 
         return back()->with('success', 'Status updated to ' . ucfirst($status));
     }

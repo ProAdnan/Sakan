@@ -140,6 +140,10 @@
                                             <th>Name</th>
 
                                             <th>Status</th>
+                                            <th>from</th>
+                                            <th>to</th>
+
+
                                             <th>Action</th>
 
                                         </tr>
@@ -148,7 +152,7 @@
                                         @forelse($my_requests as $req)
                                             <tr>
                                                 <td>
-                                                    <a href="{{ route('apartments_d',$req->apartment_id) }}">
+                                                    <a href="{{ route('apartments_d', $req->apartment_id) }}">
 
                                                         {{ $req->apartment->name }}
 
@@ -165,6 +169,20 @@
                                                         {{ ucfirst($req->status) }}
                                                     </span>
 
+
+                                                </td>
+
+                                                <td>
+
+                                                    {{ $req->start_date->format('d-m') }}
+                                                   
+
+                                                </td>
+
+                                                <td>
+
+                                                   
+                                                    {{ $req->end_date->format('d-m') }}
 
                                                 </td>
 

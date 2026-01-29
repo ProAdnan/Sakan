@@ -63,7 +63,7 @@
     @enderror
 
     @error('images.*')
-        <p class="text-danger">{{ $message }}</p>
+        <p class="text-danger">Imaages are Not Valid</p>
     @enderror
 
     <!-- Add Apartment Form -->

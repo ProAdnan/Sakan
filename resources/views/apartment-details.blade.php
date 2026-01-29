@@ -126,17 +126,13 @@
                                 &bull;
 
                                 @if ($apartment->allowed_gender == 'male')
-
                                     <i class="bi bi-gender-male"></i>
 
                                     {{ $apartment->allowed_gender }}
-
                                 @elseif($apartment->allowed_gender == 'female')
-
                                     <i class="bi bi-gender-female"></i>
 
                                     {{ $apartment->allowed_gender }}
-
                                 @endif
 
 
@@ -272,12 +268,13 @@
                                     Chat with Owner
                                 </a>
                             @else
-                                {{-- CASE 4: It's a student who hasn't requested yet --}}
-                                <form action="{{ route('apartment.request', $apartment->id) }}" method="POST"
-                                    class="w-100">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary w-100">Request to Join</button>
-                                </form>
+
+
+                                <a href="{{ route('apartment.confirm', $apartment->id) }}" class="btn btn-primary">
+                                    Request to Join
+                                </a>
+
+                                
 
                                 <a href="{{ route('messages.show', $apartment->owner_id) }}" class="btn btn-secondary">
                                     Chat with Owner

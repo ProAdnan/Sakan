@@ -154,9 +154,6 @@ class ApartmentController extends Controller
     public function update(Request $request, Apartment $owner_apartment)
     {
 
-
-
-
         // 1. Validation    
         $request->validate([
             'name' => 'required|string|max:150',

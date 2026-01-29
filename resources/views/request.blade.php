@@ -1,148 +1,141 @@
-@extends('layout.master')
+@extends('layouts.master')
 
-
-
-@section('title', 'Confirm Request')
-
+@section('title', 'Request to Join')
 
 @section('head')
+    <!-- Ensure nice fonts and icons are loaded if not already in master -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request to Join - Sakan</title>
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-        }
+    <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-        .card {
-            border: none;
-            border-radius: 1rem;
-        }
 
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-            padding: 0.8rem;
-        }
 
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-        }
 
-        .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-            border-color: #86b7fe;
-        }
-    </style>
+
+
 @endsection
 
-
 @section('content')
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-body p-5">
-                        <h2 class="h3 fw-bold mb-4 text-center">Request to Join Sunny Studio</h2>
-                        <p class="text-muted text-center mb-5">
-                            Please review your details and select your desired booking period.
-                        </p>
 
-                        <form action="#" method="POST">
+    <br><br>
 
-                            <!-- Student Information (Disabled) -->
-                            <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Student Information</h5>
+    <!-- Custom container width as requested (80%) -->
+    <div style="width: 80%; margin: 3rem auto;">
 
-                                <div class="mb-3">
-                                    <label for="name" class="form-label text-muted small">Full Name</label>
-                                    <input type="text" class="form-control bg-light" id="name" value="John Doe"
-                                        disabled>
-                                </div>
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
 
-                                <div class="mb-3">
-                                    <label for="email" class="form-label text-muted small">Email Address</label>
-                                    <input type="email" class="form-control bg-light" id="email"
-                                        value="john.doe@example.com" disabled>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label text-muted small">Phone Number</label>
-                                    <input type="text" class="form-control bg-light" id="phone"
-                                        value="+1 234 567 890" disabled>
-                                </div>
-                            </div>
-
-                            <hr class="my-4">
-
-                            <!-- Booking Period -->
-                            <div class="mb-4">
-                                <h5 class="fw-bold mb-3">Booking Period</h5>
-
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="start_date" class="form-label fw-medium">Start Date</label>
-                                        <input type="date" class="form-control" id="start_date" name="start_date"
-                                            required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="end_date" class="form-label fw-medium">End Date</label>
-                                        <input type="date" class="form-control" id="end_date" name="end_date" required>
-                                    </div>
-                                </div>
-                                <div class="form-text mt-2 text-muted">
-                                    Please select the dates you wish to stay at this apartment.
-                                </div>
-                            </div>
-
-                            <!-- Optional Message -->
-                            <div class="mb-4">
-                                <label for="message" class="form-label fw-medium">Message to Owner (Optional)</label>
-                                <textarea class="form-control" id="message" name="message" rows="3"
-                                    placeholder="Introduce yourself or ask any questions..."></textarea>
-                            </div>
-
-                            <div class="d-grid gap-2 mt-5">
-                                <button type="submit" class="btn btn-primary btn-lg fw-bold">Send Request</button>
-                                <a href="#" class="btn btn-outline-secondary">Cancel</a>
-                            </div>
-                        </form>
-                    </div>
+                <div class="mb-4 pb-3 border-bottom">
+                    <h2 class="fw-bold text-dark">Request to Join</h2>
+                    <p class="text-muted mb-0">Booking details for <span class="fw-semibold text-primary"><a
+                                href="{{ route('apartments_d', $apartment->id) }}">{{ $apartment->name }}</a></span></p>
                 </div>
+
+                <form action="{{ route('apartment.request', $apartment->id) }}" method="POST">
+                    @csrf
+                    
+
+                    <!-- Student Information Section -->
+                    <h5 class="fw-bold mb-3 text-secondary d-inline">Student Information</h5>
+
+                    <a href="{{ route('profile.edit', Auth::user()->id) }}">Edit My Information</a>
+                    <br><br>
+
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Full Name</label>
+                            <input type="text" class="form-control bg-light" value="{{ Auth::user()->name }}" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Email Address</label>
+                            <input type="email" class="form-control bg-light" value="{{ Auth::user()->email }}" disabled>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Phone Number</label>
+                            <input type="text" class="form-control bg-light" value="{{ Auth::user()->phone ?? 'N/A' }}"
+                                disabled>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Booking Period Section -->
+                    <h5 class="fw-bold mb-3 text-secondary">Booking Period</h5>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-6">
+                            <label for="start_date" class="form-label fw-bold">Check-In Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-calendar-event"></i></span>
+                                <input type="date" class="form-control @error('start_date') is-invalid @enderror"
+                                    id="start_date" name="start_date" required min="{{ date('Y-m-d') }}">
+                            </div>
+                            @error('start_date')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="end_date" class="form-label fw-bold">Check-Out Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-calendar-check"></i></span>
+                                <input type="date" class="form-control @error('end_date') is-invalid @enderror"
+                                    id="end_date" name="end_date" required min="{{ date('Y-m-d') }}">
+                            </div>
+                            @error('end_date')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                        <a href="{{ route('apartmentspage') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+
+
+
+
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">Send Request</button>
+
+
+
+
+
+
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
 
 @endsection
 
-
 @section('js')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
 
     <script>
-        // Simple client-side validation for dates
-        const startDateInput = document.getElementById('start_date');
-        const endDateInput = document.getElementById('end_date');
+        // Date Validation Logic
+        const startDate = document.getElementById('start_date');
+        const endDate = document.getElementById('end_date');
 
-        // Set min date to today
-        const today = new Date().toISOString().split('T')[0];
-        startDateInput.min = today;
-
-        startDateInput.addEventListener('change', function() {
-            endDateInput.min = this.value;
+        startDate.addEventListener('change', function() {
+            endDate.min = this.value;
         });
     </script>
-
-
 @endsection
