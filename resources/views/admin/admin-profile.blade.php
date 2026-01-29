@@ -32,7 +32,7 @@
 @section('content')
 
 
-    <div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h2 class="fw-bold mb-1">Admin Profile & Settings</h2>
             <p class="text-muted">Manage your account and platform configuration.</p>
@@ -45,7 +45,7 @@
     @endif
 
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-12 ">
             <!-- Admin Profile Card -->
             <div class="dashboard-card p-5 h-100">
                 <div class="text-center mb-5">

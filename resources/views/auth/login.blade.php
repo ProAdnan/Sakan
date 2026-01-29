@@ -1,91 +1,80 @@
-
-@section('title','Login - Sakan')
+@section('title', 'Login - Sakan')
 
 <x-guest-layout>
-    <div class="auth-layout">
-        <div class="auth-sidebar">
-            <div class="auth-sidebar-content">
-                <a href="{{ url('/') }}" class="text-white text-decoration-none fs-2 fw-bold mb-5 d-block">Sakan</a>
+    <div class="auth-container">
+        <!-- Visuals Side (Left) -->
+        <div class="auth-visuals">
+            <div class="visuals-top">
+                <div class="text-white fs-3 fw-bold"><a href="{{ route('index') }}">Sakan</a></div>
             </div>
-            <div class="auth-sidebar-content">
-                <blockquote class="auth-quote">
-                    "Finding a place to call home during your studies has never been this easy and secure."
-                </blockquote>
-                <div class="auth-quote-author">
-                    &mdash; The Sakan Team
-                </div>
+            <div class="visuals-content">
+                <h2>Welcome to your<br>Housing Community.</h2>
+                <p class="mt-4">Login to access your bookings, messages, and apartment details.</p>
             </div>
-            <div class="text-white opacity-50 small">
-                &copy; {{ date('Y') }} Sakan Housing Platform.
+            <div class="visuals-footer small opacity-75">
+                &copy; {{ date('Y') }} Sakan Housing Platform
             </div>
         </div>
 
-        <div class="auth-content">
-            <div class="auth-form-wrapper">
-                <div class="auth-header">
-                    <a href="{{ url('/') }}" class="auth-logo d-lg-none">Sakan</a>
-                    <h1 class="auth-title">Welcome Back</h1>
-                    <p class="auth-subtitle">Please enter your details to sign in.</p>
+        <!-- Form Side (Right) -->
+        <div class="auth-form-side">
+            <div class="form-wrapper">
+                <!-- Header -->
+                <div class="form-header">
+                    <a href="{{ url('/') }}" class="brand-logo d-lg-none">Sakan</a>
+                    <h1 class="form-title">Log In</h1>
+                    <p class="form-subtitle">Welcome back! Please enter your details.</p>
                 </div>
 
-                <x-auth-session-status class="mb-4" :status="session('status')" />
+                <x-auth-session-status class="mb-4 alert alert-success" :status="session('status')" />
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
-                    <div class="mb-4">
-                        <x-input-label for="email" :value="__('Email Address')" class="form-label" />
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <x-text-input id="email" class="form-control" type="email" name="email"
-                                :value="old('email')" required autofocus placeholder="name@example.com" />
-                        </div>
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label for="email" class="label-large">Email</label>
+                        <input id="email" class="input-large" type="email" name="email" value="{{ old('email') }}"
+                            required autofocus placeholder="Enter your email" />
+                        <x-input-error :messages="$errors->get('email')" class="text-danger mt-2" />
                     </div>
 
-                    <div class="mb-4">
-                        <x-input-label for="password" :value="__('Password')" class="form-label" />
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <x-text-input id="password" class="form-control" type="password" name="password"
-                                placeholder="••••••••" required autocomplete="current-password" />
-                        </div>
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="password" class="label-large">Password</label>
+                        <input id="password" class="input-large" type="password" name="password" required
+                            autocomplete="current-password" placeholder="Enter your password" />
+                        <x-input-error :messages="$errors->get('password')" class="text-danger mt-2" />
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                            <label for="remember_me" class="form-check-label text-muted small">
-                                {{ __('Remember me') }}
-                            </label>
-                        </div>
+                    <!-- Actions -->
+                    <div class="form-actions-row">
+                        <label class="custom-check">
+                            <input id="remember_me" type="checkbox" name="remember">
+                            <span>Remember for 30 days</span>
+                        </label>
 
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}"
-                                class="text-primary text-decoration-none fw-semibold small">
-                                {{ __('Forgot Password?') }}
+                            <a href="{{ route('password.request') }}" class="forgot-pass">
+                                Forgot password?
                             </a>
                         @endif
                     </div>
-                    <button type="submit" class="btn btn-primary btn-auth w-100">Sign In</button>
 
-                    {{-- <x-primary-button class="btn btn-primary btn-auth w-100">
-                        {{ __('Sign In') }}
-                    </x-primary-button> --}}
+                    <!-- Submit -->
+                    <button type="submit" class="btn-submit">
+                        Log In
+                    </button>
 
-                    <p class="text-center mt-4 text-muted">
+                    <!-- Footer -->
+                    <div class="form-footer">
                         Don't have an account?
-                        <a href="{{ route('register') }}" class="text-primary fw-bold text-decoration-none">
-                            Create free account
+                        <a href="{{ route('register') }}">Sign up</a>
+                        <br><br>
+                        <a href="{{ route('index') }}" style="color: var(--text-sub); font-weight: normal;">
+                            Go back home
                         </a>
-                    </p>
-                    <p class="text-center mt-4 text-muted">
-                        
-                        <a href="{{ route('index') }}" style="" class="text-dark fw-bold text-decoration-none">
-                            Back to home
-                        </a>
-                    </p>
+                    </div>
                 </form>
             </div>
         </div>

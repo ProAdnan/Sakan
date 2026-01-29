@@ -65,7 +65,7 @@
 
 
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-12">
             <div class="dashboard-card p-5 h-100">
                 <form action="{{ route('admin_profile.update', $admin_profile->id) }}" method="POST">
                     @csrf

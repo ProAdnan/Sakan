@@ -35,6 +35,7 @@ html, body {
     flex-direction: column;
     min-width: 0;
     position: relative; /* Crucial for internal sizing */
+    overflow: scroll;
 }
 
 

@@ -76,7 +76,7 @@
             </h6>
         </div>
 
-        <div id="chatMessages">
+        <div id="chatMessages" style="overflow:scroll;">
             @foreach ($messages as $msg)
                 <div
                     class="message-wrapper {{ $msg->user_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }} mb-3">
@@ -90,7 +90,7 @@
             @endforeach
         </div>
 
-        <div class="chat-input-area">
+        <div class="chat-input-area" style="position: fixed;bottom:1%;">
             <div class="input-group shadow-sm" style="border-radius: 30px; overflow: hidden; border: 1px solid #ddd;">
                 <input type="text" wire:model="newMessage" wire:keydown.enter="sendMessage"
                     class="form-control border-0 py-2 px-3" placeholder="Type a message...">

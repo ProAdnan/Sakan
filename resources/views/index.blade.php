@@ -42,9 +42,13 @@
                 <a href="{{ route('apartmentspage') }}" class="btn btn-primary btn-lg">
                     <i class="bi bi-search"></i> Find an Apartment
                 </a>
+
                 <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg" style="border: 2px solid white;">
                     <i class="bi bi-house-add"></i> Post Your Apartment
                 </a>
+
+
+
             </div>
         </div>
     </header>
@@ -108,7 +112,7 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ $uni->name }}</h5>
                                 <p class="text-muted"><i class="bi bi-geo-alt"></i>{{ $uni->location }}</p>
-                                
+
                                 <a href="{{ route('apartmentspage', ['university_id' => $uni->id]) }}"
                                     class="btn btn-secondary w-100">
                                     View Apartments
@@ -193,6 +197,7 @@
             </div>
         </div>
     </section>
+
 
 @endsection
 

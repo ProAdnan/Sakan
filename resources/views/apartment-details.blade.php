@@ -94,9 +94,6 @@
             @endif
         </div>
 
-
-
-
         <div class="row">
             <div class="col-lg-8">
                 <!-- Header Info -->
@@ -121,10 +118,27 @@
                                 @if ($apartment->rent_type == 'whole')
                                     <i class="bi bi-house text-primary ms-2"></i> Whole Apartment
                                 @elseif($apartment->rent_type == 'rooms')
-                                    <i class="bi bi-house text-primary ms-2"></i> Rooms
-                                    <br>
-                                    <i class="bi bi-house text-primary ms-2"></i> {{ $apartment->number_of_rooms }}
+                                    <i class="bi bi-house text-primary ms-2"></i>
+                                    {{ $apartment->number_of_rooms }}
+                                    Rooms
                                 @endif
+
+                                &bull;
+
+                                @if ($apartment->allowed_gender == 'male')
+
+                                    <i class="bi bi-gender-male"></i>
+
+                                    {{ $apartment->allowed_gender }}
+
+                                @elseif($apartment->allowed_gender == 'female')
+
+                                    <i class="bi bi-gender-female"></i>
+
+                                    {{ $apartment->allowed_gender }}
+
+                                @endif
+
 
 
 
