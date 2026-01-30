@@ -42,16 +42,19 @@
 
 @section('content')
     <div class="chat-container">
-        <div class="chat-sidebar">
+
+
+        <div class="chat-sidebar {{ isset($currentConversation) ? 'd-none d-md-flex' : 'd-flex' }}">
             <div class="p-3 border-bottom bg-white sticky-top">
                 <h5 class="fw-bold mb-0">Messages</h5>
             </div>
             <ul class="chat-list">
-                @foreach ($conversations as $conv)
+                @forelse ($conversations as $conv)
                     @php
                         $otherUser = $conv->sender_id == auth()->id() ? $conv->receiver : $conv->sender;
                         $isActive = isset($currentConversation) && $currentConversation->id == $conv->id;
                     @endphp
+
                     <li class="chat-item {{ $isActive ? 'active' : '' }}">
                         <a href="{{ route('messages.show', $otherUser->id) }}">
                             <div class="chat-avatar me-3"
@@ -66,11 +69,19 @@
                             </div>
                         </a>
                     </li>
-                @endforeach
+
+                @empty
+                    <ul class="chat-list">
+                        <li class="chat-item">
+                            <p class="">No chats Yet</p>
+                        </li>
+
+                    </ul>
+                @endforelse
             </ul>
         </div>
 
-        <div class="chat-area">
+        <div class="chat-area {{ isset($currentConversation) ? 'd-flex' : 'd-none d-md-flex' }}">
             @if ($currentConversation)
                 @livewire('chat-component', ['conversation' => $currentConversation])
             @else
@@ -80,6 +91,8 @@
                 </div>
             @endif
         </div>
+
+
     </div>
 @endsection
 
@@ -89,7 +102,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    
+
 
 
 

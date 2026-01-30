@@ -35,6 +35,8 @@ class MessageController extends Controller
             $query->where('sender_id', $receiver_id)->where('receiver_id', $sender_id);
         })->first();
 
+        
+
         if (!$conversation) {
             $conversation = Conversation::create([
                 'sender_id' => $sender_id,

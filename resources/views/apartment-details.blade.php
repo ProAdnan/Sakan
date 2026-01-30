@@ -279,6 +279,7 @@
                                 <a href="{{ route('messages.show', $apartment->owner_id) }}" class="btn btn-secondary">
                                     Chat with Owner
                                 </a>
+                                
                             @endif
                         @endauth
 

@@ -45,7 +45,7 @@ class ApartmentController extends Controller
 
             if (!$sub || $sub->status !== 'active' || now()->greaterThan($sub->end_date)) {
                 return redirect()->route('plans.index')
-                    ->with('error', 'You need an active subscription to list apartments.');
+                    ->with('error', 'You need an active subscription to Create Apartments.');
             }
 
             return redirect()->route('plans.index')

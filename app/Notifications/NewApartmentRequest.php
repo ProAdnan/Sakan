@@ -6,23 +6,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Request as Requests;
+use App\Models\Request;
 
-class RequestStatusUpdated extends Notification
+class NewApartmentRequest extends Notification
 {
     use Queueable;
 
-    // 1. Declare the variables
     public $apartmentRequest;
-    public $status;
+
+
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Requests $apartmentRequest, $status)
+    public function __construct(Request $app_req)
     {
-        $this->apartmentRequest = $apartmentRequest;
-        $this->status = $status;
+        $this->apartmentRequest = $app_req;
+
     }
 
     /**
@@ -32,7 +32,7 @@ class RequestStatusUpdated extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database']; // Only save to DB
+        return ['database'];
     }
 
     /**
@@ -54,11 +54,14 @@ class RequestStatusUpdated extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            // Access the apartment name through the relation we set up earlier
-            'message' => "Your request for " . $this->apartmentRequest->apartment->name . " was " . $this->status,
-            'status' => $this->status,
-            'request_id' => $this->apartmentRequest->id,
-            'url' => route('profile.edit',auth()->user()->id),
+
+            'message' => 'New request received from ' . auth()->user()->name,
+            // The link takes the Owner to their "Incoming Requests" page
+            'url' => route('request.index'),
+            'student_name' => auth()->user()->name,
+
+
         ];
+
     }
 }

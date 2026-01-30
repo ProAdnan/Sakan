@@ -93,7 +93,7 @@ Route::get('/apartment/{apartment}/Confirm Request', [UserRequestController::cla
 // Route for submitting a request
 Route::post('/requests/{apartments}', [UserRequestController::class, 'store'])
     ->name('apartment.request');
-    
+
 // // Route for starting a chat
 // Route::get('/chat/{apartment}/{user}', [ChatController::class, 'show'])
 //     ->name('chat.index');
@@ -171,6 +171,13 @@ Route::get('/subscribe/confirm/{plan}', [SubscriptionController::class, 'confirm
 Route::post('/subscribe/finalize/{plan}', [SubscriptionController::class, 'finalize'])->name('plans.finalize');
 
 Route::post('/apartments/{apartment}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+Route::delete('/notifications/{id}', function ($id) {
+    auth()->user()->notifications()->where('id', $id)->delete();
+    return back()->with('success', 'Notification deleted');
+})->name('notifications.destroy')->middleware('auth');
+
 
 require __DIR__ . '/auth.php';
 

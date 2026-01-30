@@ -1,23 +1,30 @@
 /* 1. Force the page to be a fixed window */
-html, body {
+html,
+body {
     height: 100vh !important;
     width: 100vw !important;
     margin: 0;
     padding: 0;
-    overflow: hidden !important; /* This stops the "page" from scrolling */
+    overflow: hidden !important;
+    /* This stops the "page" from scrolling */
 }
+
 /* 2. The Main Container - Fixed to the viewport */
 .chat-container {
     display: flex;
     position: fixed;
-    top: 76px;    /* Height of your Navbar */
-    bottom: 0;    /* Force it to touch the bottom of the screen */
+    top: 76px;
+    /* Height of your Navbar */
+    bottom: 0;
+    /* Force it to touch the bottom of the screen */
     left: 0;
     right: 0;
     width: 100vw;
     background: #fff;
-    z-index: 1000; /* Sit above the footer */
+    z-index: 1000;
+    /* Sit above the footer */
 }
+
 /* 3. Sidebar stays fixed */
 .chat-sidebar {
     width: 350px;
@@ -26,7 +33,9 @@ html, body {
     border-right: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
+    background: #fff;
 }
+
 /* 4. Chat Area - The wrapper for the Livewire component */
 .chat-area {
     flex: 1;
@@ -34,10 +43,9 @@ html, body {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    position: relative; /* Crucial for internal sizing */
-    overflow: scroll;
+    position: relative;
+    background: #fff;
 }
-
 
 /* 5. The Component inner wrapper (Livewire div) */
 .chat-component-wrapper {
@@ -45,21 +53,31 @@ html, body {
     flex-direction: column;
     height: 100%;
     width: 100%;
+    position: relative;
 }
+
+/* Header */
+.chat-header {
+    flex-shrink: 0;
+}
+
 /* 6. The Messages - This is the ONLY thing allowed to scroll */
 #chatMessages {
-    flex: 1; 
+    flex: 1;
     overflow-y: auto !important;
     padding: 20px;
     background-color: #f8fafc;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* Prevents it from expanding the parent */
+    min-height: 0;
 }
+
 .chat-list {
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .chat-item {
@@ -75,6 +93,10 @@ html, body {
     color: inherit;
 }
 
+.chat-item:hover {
+    background-color: #f8fafc;
+}
+
 .chat-item.active {
     background-color: #eff6ff;
     border-left: 4px solid #007bff;
@@ -85,51 +107,57 @@ html, body {
     width: 100%;
     margin-bottom: 15px;
 }
-/* 7. The Input Area - Locked to the bottom of .chat-area */
+
+/* 7. The Input Area - Locked to the bottom via Flexbox */
 .chat-input-area {
     flex-shrink: 0;
     background: white;
     border-top: 1px solid #dee2e6;
     padding: 15px;
     width: 100%;
+    /* Full width of parent */
 }
+
 /* Custom scrollbar for a cleaner look */
-#chatMessages::-webkit-scrollbar, .chat-sidebar::-webkit-scrollbar {
+#chatMessages::-webkit-scrollbar,
+.chat-sidebar::-webkit-scrollbar,
+.chat-list::-webkit-scrollbar {
     width: 6px;
 }
-#chatMessages::-webkit-scrollbar-thumb, .chat-sidebar::-webkit-scrollbar-thumb {
+
+#chatMessages::-webkit-scrollbar-thumb,
+.chat-sidebar::-webkit-scrollbar-thumb,
+.chat-list::-webkit-scrollbar-thumb {
     background-color: #cbd5e1;
     border-radius: 10px;
 }
 
-
-
 /* The actual message bubble */
 .message {
-    max-width: 70%;       /* Prevents the bubble from being too wide */
-    padding: 10px 16px;   /* Space inside the bubble */
-    border-radius: 18px;  /* Rounded corners */
+    max-width: 70%;
+    padding: 10px 16px;
+    border-radius: 18px;
     font-size: 0.95rem;
     line-height: 1.4;
     position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Messages sent by YOU */
 .message.sent {
-    background-color: #007bff; /* Blue */
+    background-color: #007bff;
     color: white;
-    border-bottom-right-radius: 4px; /* WhatsApp style sharp corner */
-    margin-left: auto; /* Extra push to the right */
+    border-bottom-right-radius: 4px;
+    margin-left: auto;
 }
 
 /* Messages received from OTHERS */
 .message.received {
-    background-color: #ffffff; /* White */
+    background-color: #ffffff;
     color: #333;
     border: 1px solid #e2e8f0;
-    border-bottom-left-radius: 4px; /* WhatsApp style sharp corner */
-    margin-right: auto; /* Extra push to the left */
+    border-bottom-left-radius: 4px;
+    margin-right: auto;
 }
 
 /* Space for the timestamp inside the bubble */
@@ -149,3 +177,41 @@ html, body {
     color: #888;
 }
 
+/* RESPONSIVE MEDIA QUERIES */
+
+/* Tablet and smaller (< 992px) */
+@media (max-width: 991.98px) {
+    .chat-sidebar {
+        width: 300px;
+        /* Slightly smaller sidebar on tablet */
+        min-width: 300px;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767.98px) {
+    .chat-container {
+        top: 60px;
+        /* Adjust if navbar is smaller on mobile, otherwise keep 76px */
+    }
+
+    /* By default on mobile, we handle visibility via utility classes (d-none/d-block) 
+       controlled by the Blade template based on state. 
+       But we ensure here that if they are visible, they take full width. */
+
+    .chat-sidebar {
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+    }
+
+    .chat-area {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .message {
+        max-width: 85%;
+        /* Allow wider bubbles on mobile */
+    }
+}

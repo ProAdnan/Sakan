@@ -1,3 +1,4 @@
+
 @auth
     @if (Auth::user()->role == 'student')
         <nav class="navbar navbar-expand-lg fixed-top">
@@ -39,10 +40,19 @@
                             <li>
                                 @forelse(auth()->user()->unreadNotifications as $notification)
                             <li>
-                                <a class="dropdown-item" href="{{ $notification->data['url'] ?? '#' }}">
+                                <a class="dropdown-item d-inline" href="{{ $notification->data['url'] ?? '#' }}">
                                     {{ $notification->data['message'] }}
                                     <br><small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                 </a>
+                                <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
+                                    class="ms-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm text-danger p-0 d-inline" title="Delete">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+
                             </li>
 
 
@@ -117,9 +127,66 @@
                             href="{{ route('owner.index') }}">Owner Dashboard</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
+
+
+
+                    <div class="dropdown pe-3">
+                        <a href="#" class="text-dark position-relative me-2" id="notificationDropdownStudent"
+                            data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                            <i class="bi bi-bell fs-5"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notificationDropdownStudent"
+                            style="min-width: 250px;">
+                            <li>
+                                <h6 class="dropdown-header">Notifications</h6>
+
+                                @if (auth()->user()->unreadNotifications->count() > 0)
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                    </span>
+                                @endif
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                            <li>
+                                <a class="dropdown-item" href="{{ $notification->data['url'] ?? '#' }}">
+                                    {{ $notification->data['message'] }}
+                                    <br><small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                </a>
+
+                                <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST"
+                                    class="ms-2 ">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm text-danger p-0" title="Delete">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+
+
+
+                            </li>
+
+
+                        @empty
+                            <li class="dropdown-item text-center">No new notifications</li>
+                            @endforelse
+
+
+
+
+                            </li>
+                        </ul>
+                    </div>
+
                     <a href="{{ route('messages.index') }}" class="text-dark position-relative me-2" title="Messages">
                         <i class="bi bi-chat-dots fs-5"></i>
                     </a>
+
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
                             id="ownerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
