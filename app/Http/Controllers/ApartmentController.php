@@ -21,10 +21,13 @@ class ApartmentController extends Controller
     public function index()
     {
 
-        $apartments = Apartment::with('images')
+        $apartments = Apartment::with('images','requests.student')
             ->where('owner_id', auth()->id())
             ->latest()
             ->get();
+
+
+
 
         return view('owner.owner-apartments', compact('apartments'));
     }

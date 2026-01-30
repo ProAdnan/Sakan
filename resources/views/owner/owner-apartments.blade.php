@@ -20,7 +20,14 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 
+
+
 @endsection
+
+
+
+
+
 
 
 
@@ -43,7 +50,7 @@
     @endif
 
 
-    
+
 
     <!-- Apartments List -->
     <div class="dashboard-card">
@@ -61,7 +68,7 @@
                         <th>Location</th>
                         <th>Views</th>
                         <th>Status</th>
-                        <th colspan="2">Actions</th>
+                        <th colspan="3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,6 +108,55 @@
                                 </a>
 
 
+                            </td>
+
+                            <td>
+
+                                <div class="dropdown">
+                                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        View Students
+                                    </button>
+                                    <ul class="dropdown-menu shadow">
+
+
+                                        @forelse($apart->requests as $request)
+                                            @php
+                                                $statusClasses = [
+                                                    'approved' => 'bg-success',
+                                                    'rejected' => 'bg-danger',
+                                                    'pending' => 'bg-warning text-dark',
+                                                ];
+                                                $class = $statusClasses[$request->status] ?? 'bg-secondary';
+                                            @endphp
+
+
+                                            <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                                <span>{{ $request->student->name }}</span>
+
+                                                <span class="badge {{ $class }}">{{ $request->status }}</span>
+
+                                            </li>
+
+
+                                        @empty
+                                            <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                                <span>No Requests</span>
+                                            </li>
+                                        @endforelse
+
+
+
+
+
+                                    </ul>
+                                </div>
+
+                            </td>
+
+
+
+
+                            <td>
 
                                 <form action="{{ route('owner_apartments.destroy', $apart->id) }}" method="POST"
                                     class="d-inline delete-form">
@@ -116,6 +172,10 @@
 
 
                             </td>
+
+
+
+
                         </tr>
 
                     @empty
