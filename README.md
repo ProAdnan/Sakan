@@ -1,57 +1,61 @@
-Sakan
-Project Description
+# Sakan
+
+## Project Description
+
 Sakan is a web-based platform designed to help students easily find apartments near their universities, while allowing apartment owners to list, manage, and communicate about their apartments. The system also includes an admin dashboard to manage users, universities, and apartment listings, ensuring a safe and organized housing experience for students.
 
-Features
-Public landing page with universities and apartment previews
+## Features
 
-User authentication (login & signup)
+- Public landing page with universities and apartment previews
 
-Role-based access (Student, Apartment Owner, Admin)
+- User authentication (login & signup)
 
-Universities listing with location details
+- Role-based access (Student, Apartment Owner, Admin)
 
-Apartments listing with filters (price, rooms, availability)
+- Universities listing with location details
 
-Detailed apartment pages with owner contact/request option
+- Apartments listing with filters (price, rooms, availability)
 
-Student profile management
+- Detailed apartment pages with owner contact/request option
+
+- Student profile management
 
 -Chatting and Notifications System
 
-Apartment owner dashboard:
+- Apartment owner dashboard:
 
-Manage apartments (add, edit, delete)
+  - Manage apartments (add, edit, delete)
 
-View and respond to student requests
+  - View and respond to student requests
 
-Chat with students
+  - Chat with students
 
-View analytics
+  - View analytics
 
-Admin dashboard:
+- Admin dashboard:
 
-System analytics
+  - System analytics
 
-Manage users, universities, and apartments
+  - Manage users, universities, and apartments
 
-Approve and control apartment listings
+  - Approve and control apartment listings
 
-Responsive and student-friendly UI
+- Responsive and student-friendly UI
 
-Technologies & Tools Used
-HTML
+## Technologies & Tools Used
 
-CSS
+- HTML
 
-JavaScript
+- CSS
 
-Backend Framework Laravel
+- JavaScript
 
-Database :MySQL
+- Backend Framework Laravel
 
-Authentication & Authorization
+- Database :MySQL
 
-GitHub
+- Authentication & Authorization
 
-UI/UX Design
+- GitHub
+
+- UI/UX Design
