@@ -108,7 +108,7 @@
                         <h4 class="fw-bold mb-3">{{ $plan->name }}</h4>
                         <div class="mb-4">
                             <span class="plan-price">$ {{ $plan->price }}</span>
-                            <span class="plan-period">{{ $plan->duration_days }}/ year</span>
+                            <span class="plan-period">{{ $plan->duration_days }}/ Day</span>
                         </div>
                         <p class="text-muted mb-4">{{ $plan->description }}</p>
 

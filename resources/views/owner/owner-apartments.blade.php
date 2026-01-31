@@ -53,22 +53,22 @@
 
 
     <!-- Apartments List -->
-    <div class="dashboard-card">
-        <div class="table-responsive">
+    <div class="dashboard-card ">
+        <div class="table-responsive ">
 
 
 
 
-            <table class="table mb-0">
+            <table class="table mb-0 ">
                 <thead>
                     <tr>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Location</th>
-                        <th>Views</th>
-                        <th>Status</th>
-                        <th colspan="3">Actions</th>
+                        <th class="text-center">Image</th>
+                        <th class="text-center">Title</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Location</th>
+                        <th class="text-center">Views</th>
+                        <th class="text-center">Status</th>
+                        <th colspan="3" class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,7 +83,7 @@
                             $displayImage = $mainImage ?? $apart->images->first();
                         @endphp
 
-                        <tr>
+                        <tr class="text-center">
                             <td>
                                 <img src="{{ $displayImage ? asset('storage/' . $displayImage->image_path) : asset('images/sample1.jpg') }}"
                                     alt="Apt" class="rounded" width="60" height="40" style="object-fit: cover;">

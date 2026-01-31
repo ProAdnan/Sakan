@@ -143,8 +143,8 @@
     <section class="section">
         <div class="container">
             <div class="section-title">
-                <h2>Featured Apartments</h2>
-                <p>Check out the latest listings for students.</p>
+                <h2>Newest Apartment Listings</h2>
+                <p>Explore the latest apartments posted just for you.</p>
             </div>
             <div class="row g-4">
 

@@ -50,6 +50,10 @@
                         <th>Apartment</th>
                         <th>Date</th>
 
+                        <th>From</th>
+
+                        <th>To</th>
+
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -72,6 +76,16 @@
                             </td>
                             <td>{{ $req->apartment->name }}</td>
                             <td>{{ $req->created_at->diffForHumans() }}</td>
+
+                            <td>
+                                {{ $req->start_date->format('d-m') }}
+                            </td>
+
+                            <td>
+                                {{ $req->end_date->format('d-m') }}
+
+                            </td>
+
 
                             <td>
                                 <span

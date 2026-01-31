@@ -71,7 +71,7 @@
                     </li>
 
                 @empty
-                    <ul class="chat-list">
+                    <ul class="chat-list" style="text-align: center; margin-top:4%;">
                         <li class="chat-item">
                             <p class="">No chats Yet</p>
                         </li>

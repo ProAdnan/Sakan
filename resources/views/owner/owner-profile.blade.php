@@ -27,7 +27,7 @@
 
 
     <div class="profile-header-card mb-5">
-        <h2 class="fw-bold fs-1">My Profile</h2>
+        <h2 class="fw-bold fs-1"><br></h2>
         <div class="profile-avatar-wrapper">
             @php
                 $avatarUrl = $owner->profile_image
